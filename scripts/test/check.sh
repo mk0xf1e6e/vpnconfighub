@@ -50,3 +50,8 @@ for file in "${required_files[@]}"; do
 done
 
 log_success "Project structure is valid."
+
+"$ROOT_DIR/scripts/test/backend.sh"
+"$ROOT_DIR/scripts/test/frontend.sh"
+
+log_success "All project checks passed."

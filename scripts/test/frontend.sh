@@ -11,7 +11,7 @@ require_command npm
 cd "$ROOT_DIR/apps/web"
 
 log_info "Installing/checking frontend dependencies..."
-npm install
+npm install --no-workspaces
 
 log_info "Running frontend lint..."
 npm run lint
