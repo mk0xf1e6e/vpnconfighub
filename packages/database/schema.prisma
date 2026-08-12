@@ -1,0 +1,92 @@
+// Prisma schema placeholder. After running `pnpm install` at root, run:
+//   pnpm --filter @vpn-hub/database exec prisma init
+// then replace this with full schema and run `prisma migrate dev`.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id          String   @id @default(uuid())
+  telegramId  String   @unique
+  username    String?
+  firstName   String?
+  lastName    String?
+  languageCode String?
+  isAdmin     Boolean  @default(false)
+  referredById String?
+  referredBy  User?    @relation("Referrals", fields: [referredById], references: [id])
+  referrals   User[]   @relation("Referrals")
+   createdAt   DateTime @default(now())
+   updatedAt   DateTime @updatedAt
+   subscriptions Subscription[]
+   transactions  Transaction[]
+}
+
+model Plan {
+  id                String  @id @default(uuid())
+  name              String
+  durationDays      Int
+  trafficQuotaBytes BigInt
+  priceStars        Int
+  priceTon          String?
+  priceUsd          Float?
+  isActive          Boolean @default(true)
+  subscriptions     Subscription[]
+}
+
+model VpnNode {
+  id        String  @id @default(uuid())
+  name      String
+  region    String
+  host      String
+  panelKind String  // "3x-ui" | "marzban" | "hiddify"
+  apiUrl    String
+  apiKey    String
+  isActive  Boolean @default(true)
+  inbounds  Inbound[]
+  subscriptions Subscription[]
+}
+
+model Inbound {
+  id         String  @id @default(uuid())
+  nodeId     String
+  node       VpnNode @relation(fields: [nodeId], references: [id])
+  tag        String
+  port       Int
+  protocol   String
+  isActive   Boolean @default(true)
+}
+
+model Subscription {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  planId     String
+  plan       Plan     @relation(fields: [planId], references: [id])
+  nodeId     String
+  node       VpnNode  @relation(fields: [nodeId], references: [id])
+  startsAt   DateTime
+  expiresAt  DateTime
+  quotaBytes BigInt
+  usedBytes  BigInt  @default(0)
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  provider  String   // "stars" | "ton" | "stripe" | "crypto"
+  amount    Int
+  currency  String
+  payload   String
+  status    String   // "pending" | "paid" | "refunded" | "failed"
+  createdAt DateTime @default(now())
+}
