@@ -1,0 +1,66 @@
+// Prisma schema for Telegram Mini App
+// Provider: PostgreSQL (matches existing project setup)
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(uuid())
+  telegramId    String   @unique
+  username      String?
+  starsBalance  Int      @default(0)
+  activeSubscription  SubscriptionPlan? @relation("ActiveSubscription", fields: [activeSubscriptionId], references: [id])
+  activeSubscriptionId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model SubscriptionPlan {
+  id            String   @id @default(uuid())
+  name          String
+  priceUsd      Float
+  priceStars    Int
+  durationDays  Int
+  trafficQuotaBytes BigInt
+  protocolFeatures String[]   // Stores array of strings (e.g., ["VLESS Reality", "Trojan TLS"])
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  clients       ClientKey[]   // Reverse relation
+}
+
+model V2rayNode {
+  id            String   @id @default(uuid())
+  name          String
+  flag          String   // e.g., "���🇩���🇪" for Germany
+  country       String
+  host          String
+  port          Int
+  protocol      String   // e.g., "VLESS", "Trojan", "MTProto"
+  load          Int      @default(0)
+  status        String   // "active", "maintenance", etc. @default("active")
+  threeXuiInboundId Int   // The inbound ID in the 3X-UI panel for this node
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model ClientKey {
+  id            String   @id @default(uuid())
+  user          User     @relation(fields: [userId], references: [id])
+  userId        String
+  node          V2rayNode @relation(fields: [nodeId], references: [id])
+  nodeId        String
+  inboundId     Int      // The inbound ID in the 3X-UI panel (matches V2rayNode.threeXuiInboundId)
+  uuid          String   // The UUID for VLESS/VMESS or public key for Trojan
+  expiryDate    DateTime
+  dataUsed      BigInt   @default(0)
+  dataTotal     BigInt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

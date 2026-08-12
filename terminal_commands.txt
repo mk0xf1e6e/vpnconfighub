@@ -1,0 +1,26 @@
+# Step 1: Create a new Next.js app with TypeScript and Tailwind CSS
+npx create-next-app@latest apps/nextjs-mini-app --typescript --tailwind --eslint --app --src-dir --import-alias="@/*"
+
+# Step 2: Change to the new app directory
+cd apps/nextjs-mini-app
+
+# Step 3: Install additional dependencies
+npm install framer-motion @twa-dev/sdk lucide-react axios qrcode.react
+npm install prisma @prisma/client -D
+
+# Step 4: Initialize Prisma (creates prisma/schema.prisma)
+npx prisma init
+
+# Step 5: Copy environment variables from root (adjust as needed)
+cp ../../.env.example .env
+# Edit .env to set DATABASE_URL (if needed) and add:
+#   THREE_XUI_URL=http://your-3xui-panel:port
+#   THREE_XUI_USERNAME=your_username
+#   THREE_XUI_PASSWORD=your_password
+#   TELEGRAM_BOT_TOKEN=your_bot_token_from_BotFather
+
+# Step 6: Run Prisma migration to create database schema
+npx prisma migrate dev --name init
+
+# Step 7: Start development server (optional)
+npm run dev
