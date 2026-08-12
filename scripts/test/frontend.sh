@@ -6,17 +6,16 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$ROOT_DIR/scripts/lib/common.sh"
 
 require_command node
-require_command npm
 
-cd "$ROOT_DIR/apps/web"
+cd "$ROOT_DIR"
 
 log_info "Installing/checking frontend dependencies..."
-npm install --no-workspaces
+pnpm install
 
 log_info "Running frontend lint..."
-npm run lint
+pnpm --filter web lint
 
 log_info "Building frontend..."
-npm run build
+pnpm --filter web build
 
 log_success "Frontend checks passed."
