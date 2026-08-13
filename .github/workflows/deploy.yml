@@ -1,0 +1,62 @@
+name: deploy-frontend
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+concurrency:
+  group: frontend-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.1
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter ./apps/web lint
+      - run: pnpm --filter ./apps/web exec tsc --noEmit
+      - run: pnpm --filter ./apps/web build
+
+      - name: Configure SSH
+        env:
+          VPS_SSH_KEY: ${{ secrets.VPS_SSH_KEY }}
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$VPS_SSH_KEY" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H "${{ secrets.VPS_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Deploy frontend
+        env:
+          VPS_HOST: ${{ secrets.VPS_HOST }}
+          VPS_USER: ${{ secrets.VPS_USER }}
+        run: |
+          ssh "$VPS_USER@$VPS_HOST" '
+            set -e
+            git -C /opt/vpn-config-hub fetch origin main
+            git -C /opt/vpn-config-hub reset --hard origin/main
+            cd /opt/vpn-config-hub
+            docker rm -f deploy_frontend_1 2>/dev/null || true
+            docker-compose -f deploy/compose.frontend.yml build frontend
+            docker-compose -f deploy/compose.frontend.yml up -d frontend
+            sleep 10
+            curl -fsS http://127.0.0.1:3000/ >/dev/null
+            nginx -t
+            systemctl is-active --quiet nginx
+          '
+
+      - name: Verify public deployment
+        run: curl --fail --silent --show-error --head https://vch.milad-karami.ir/
