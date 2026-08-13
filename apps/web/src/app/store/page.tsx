@@ -64,10 +64,6 @@ export default function StorePage() {
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
 
-  const handleConfirmPurchase = () => {
-    setSelectedPlan(null);
-  };
-
   return (
     <div className="p-4 space-y-5">
       <header>
@@ -77,6 +73,9 @@ export default function StorePage() {
             <p className="text-xs text-[#7f8c99]">Choose the plan that fits your needs</p>
           </div>
         </div>
+        <p className="mt-3 rounded-xl border border-[#eac035]/30 bg-[#eac035]/10 px-3 py-2 text-xs text-[#eac035]">
+          Frontend catalog only. Payments and subscriptions are not connected.
+        </p>
       </header>
 
       <div className="flex items-center justify-center">
@@ -126,7 +125,6 @@ export default function StorePage() {
           plan={selectedPlan}
           billingPeriod={billingPeriod}
           onClose={() => setSelectedPlan(null)}
-          onConfirmPurchase={handleConfirmPurchase}
         />
       )}
     </div>

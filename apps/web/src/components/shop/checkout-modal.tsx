@@ -6,7 +6,6 @@ interface CheckoutModalProps {
   plan: SubscriptionPlan;
   billingPeriod: "monthly" | "annual";
   onClose: () => void;
-  onConfirmPurchase: () => void;
 }
 
 export function CheckoutModal({

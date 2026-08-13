@@ -33,7 +33,7 @@ export function SpeedChart({ width = 320, height = 100, data, label = "Speed (Mb
       <div className="rounded-2xl border border-[#2b394a] bg-[#242f3d] p-5 shadow-lg">
         <div className="flex items-center justify-between">
           <h3 className="text-sm font-bold text-[#f5f5f5]">Bandwidth Monitor</h3>
-          <span className="text-xs text-[#7f8c99]">Offline</span>
+          <span className="text-xs text-[#7f8c99]">Unavailable</span>
         </div>
         <div className="h-[100px] flex items-center justify-center text-xs text-[#7f8c99]">
           No traffic data available yet
@@ -46,9 +46,8 @@ export function SpeedChart({ width = 320, height = 100, data, label = "Speed (Mb
     <div className="rounded-2xl border border-[#2b394a] bg-[#242f3d] p-5 shadow-lg">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-sm font-bold text-[#f5f5f5]">Bandwidth Monitor</h3>
-        <span className="text-xs text-[#4cd964] flex items-center gap-1">
-          <span className="w-2 h-2 rounded-full bg-[#4cd964] animate-pulse" />
-          Live
+          <span className="text-xs text-[#7f8c99]">
+            Data available
         </span>
       </div>
       <div className="relative w-full h-[100px]">
