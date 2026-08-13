@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { BottomNav } from "@/components/layout/bottom-nav";
 import { TelegramProvider } from "@/components/telegram/telegram-provider";
+import { TelegramShell } from "@/components/layout/telegram-shell";
 
 export const metadata: Metadata = {
   title: "VPN Config Hub",
-  description: "VPN and proxy services",
+  description: "Telegram Mini App for VPN and Proxy Services",
 };
 
 export default function RootLayout({
@@ -15,23 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen antialiased">
+      <body className="min-h-screen bg-[#0e1621] text-[#f5f5f5] antialiased">
         <TelegramProvider />
-
-        <div
-          className="mx-auto min-h-screen max-w-lg"
-          style={{
-            paddingTop: "var(--tg-content-safe-area-inset-top, 0px)",
-            paddingLeft: "var(--tg-content-safe-area-inset-left, 0px)",
-            paddingRight: "var(--tg-content-safe-area-inset-right, 0px)",
-            paddingBottom:
-              "calc(6rem + var(--tg-content-safe-area-inset-bottom, 0px))",
-          }}
-        >
-          {children}
-        </div>
-
-        <BottomNav />
+        <TelegramShell>{children}</TelegramShell>
       </body>
     </html>
   );

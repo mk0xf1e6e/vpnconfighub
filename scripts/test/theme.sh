@@ -14,6 +14,7 @@ log_info "Checking Telegram theme integration..."
 required_files=(
     "apps/web/src/types/telegram.ts"
     "apps/web/src/components/telegram/telegram-provider.tsx"
+    "apps/web/src/components/layout/telegram-shell.tsx"
     "apps/web/src/app/globals.css"
 )
 

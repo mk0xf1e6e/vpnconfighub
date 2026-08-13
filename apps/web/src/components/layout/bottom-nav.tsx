@@ -6,8 +6,9 @@ import { usePathname } from "next/navigation";
 const items = [
   { href: "/", label: "Home", icon: "⌂" },
   { href: "/store", label: "Store", icon: "▣" },
-  { href: "/services", label: "Services", icon: "◇" },
-  { href: "/profile", label: "Profile", icon: "○" },
+  { href: "/nodes", label: "Nodes", icon: "⚡" },
+  { href: "/guides", label: "Guides", icon: "📖" },
+  { href: "/support", label: "Help", icon: "💬" },
 ];
 
 export function BottomNav() {
@@ -15,16 +16,12 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#2b394a] bg-[#17212b]"
       style={{
-        backgroundColor:
-          "var(--tg-theme-bottom-bar-bg-color, var(--tg-theme-bg-color, #ffffff))",
-        borderColor:
-          "var(--tg-theme-section-separator-color, var(--tg-theme-secondary-bg-color, #f4f4f5))",
         paddingBottom: "var(--tg-safe-area-inset-bottom, 0px)",
       }}
     >
-      <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
+      <div className="mx-auto flex max-w-lg items-center justify-around px-1 py-2">
         {items.map((item) => {
           const active = pathname === item.href;
 
@@ -32,16 +29,18 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs"
+              className="flex min-w-[60px] flex-col items-center gap-0.5 rounded-xl px-2 py-1.5 text-xs transition focus:outline-none focus:ring-2 focus:ring-[#2aabee]"
               style={{
-                color: active
-                  ? "var(--tg-theme-text-color, #000000)"
-                  : "var(--tg-theme-hint-color, #71717a)",
+                color: active ? "#2aabee" : "#7f8c99",
               }}
+              aria-current={active ? "page" : undefined}
             >
-              <span className="text-xl">{item.icon}</span>
-
-              <span className={active ? "font-semibold" : undefined}>
+              <span className="text-lg leading-none">{item.icon}</span>
+              <span
+                className={`text-[10px] tracking-tight ${
+                  active ? "font-bold text-[#2aabee]" : "font-medium text-[#7f8c99]"
+                }`}
+              >
                 {item.label}
               </span>
             </Link>
