@@ -18,18 +18,25 @@ export interface TelegramAuthResponse {
 }
 
 export async function authenticateTelegram(initData: string): Promise<TelegramAuthResponse> {
-  const response = await fetch(`${API_URL}/api/auth/telegram`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    cache: "no-store",
-    credentials: "include",
-    body: JSON.stringify({ initData }),
-  });
+  let response: Response;
+
+  try {
+    response = await fetch(`${API_URL}/api/auth/telegram`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      cache: "no-store",
+      credentials: "include",
+      body: JSON.stringify({ initData }),
+    });
+  } catch {
+    throw new Error(`Cannot reach authentication API at ${API_URL}`);
+  }
 
   if (!response.ok) {
-    throw new Error(`Telegram auth failed: ${response.status}`);
+    const detail = (await response.text()).trim();
+    throw new Error(detail || `Telegram auth failed: ${response.status}`);
   }
 
   return response.json();

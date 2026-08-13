@@ -42,6 +42,7 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
   const { webApp } = useTelegram();
   const [state, setState] = useState<AuthState>("AUTHENTICATING");
   const [account, setAccount] = useState<TelegramAccount | null>(null);
+  const [authError, setAuthError] = useState<string | null>(null);
   const [retryKey, setRetryKey] = useState(0);
 
   useEffect(() => {
@@ -60,11 +61,13 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
         const resolvedAccount = response.account ?? response.user ?? null;
 
         setAccount(resolvedAccount);
+        setAuthError(resolvedAccount ? null : "Authentication API returned no user.");
         setState(resolvedAccount ? "AUTHENTICATED" : "AUTH_ERROR");
       })
-      .catch(() => {
+      .catch((error: unknown) => {
         if (!cancelled) {
           setAccount(null);
+          setAuthError(error instanceof Error ? error.message : "Telegram authentication failed.");
           setState("AUTH_ERROR");
         }
       });
@@ -130,6 +133,11 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
           <p className="mt-3 text-sm leading-6 text-[#7f8c99]">
             Please reopen the Mini App from Telegram.
           </p>
+          {authError ? (
+            <p className="mt-4 break-words rounded-xl border border-[#e05d5d]/40 bg-[#e05d5d]/10 px-3 py-2 text-left text-xs text-[#ff8585]">
+              {authError}
+            </p>
+          ) : null}
           <button
             type="button"
             onClick={() => setRetryKey((value) => value + 1)}
