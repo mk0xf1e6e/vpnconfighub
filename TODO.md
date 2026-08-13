@@ -25,8 +25,10 @@
 - [x] Frontend-only production Compose stack
 - [x] Nginx frontend reverse proxy configuration
 - [ ] Nginx HTTPS routing
-- [ ] Cloudflare origin configuration
-- [ ] VPS deployment workflow
+- [x] Cloudflare origin configuration
+- [x] VPS frontend deployment
+- [x] VPS deployment workflow
+- [x] `vch.milad-karami.ir` public HTTPS verification
 - [x] GitHub Actions frontend deployment workflow
 
 Current milestone: frontend container and CI are deployment-ready. Nginx, Cloudflare, VPS, admin, and backend deployment remain deferred until those services exist.
