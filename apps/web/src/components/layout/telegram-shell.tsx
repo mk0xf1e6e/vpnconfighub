@@ -14,7 +14,9 @@ export function TelegramShell({ children }: TelegramShellProps) {
       <div className="relative min-h-screen w-full bg-[#17212b] shadow-2xl sm:min-h-[840px] sm:max-w-[420px] sm:overflow-hidden sm:rounded-[32px] sm:border sm:border-[#2b394a]">
         <header className="sticky top-0 z-40 border-b border-[#2b394a] bg-[#17212b] px-4 py-3 shadow-md">
           <p className="text-sm font-semibold text-[#f5f5f5]">VPN Config Hub</p>
-          <p className="text-xs text-[#7f8c99]">Telegram account connected</p>
+          <p className="text-xs text-[#7f8c99]">
+            {process.env.NODE_ENV === "production" ? "Telegram account connected" : "Frontend development mode"}
+          </p>
         </header>
 
         {/* Scrollable Content Container */}

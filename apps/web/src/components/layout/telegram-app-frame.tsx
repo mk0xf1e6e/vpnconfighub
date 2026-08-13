@@ -86,6 +86,14 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
     return `https://t.me/${telegramBotUsername}`;
   }, [telegramBotUsername]);
 
+  if (process.env.NODE_ENV !== "production") {
+    return (
+      <TelegramAccountContext.Provider value={null}>
+        <TelegramShell>{children}</TelegramShell>
+      </TelegramAccountContext.Provider>
+    );
+  }
+
   if (!webApp?.initData) {
     return (
       <main className="flex min-h-screen items-center justify-center px-4 py-8">
