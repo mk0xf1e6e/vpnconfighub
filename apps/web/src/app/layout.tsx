@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { TelegramProvider } from "@/components/telegram/telegram-provider";
-import { DevThemeSwitcher } from "@/components/telegram/dev-theme-switcher";
 
 export const metadata: Metadata = {
   title: "VPN Config Hub",
@@ -19,9 +18,16 @@ export default function RootLayout({
       <body className="min-h-screen antialiased">
         <TelegramProvider />
 
-        <DevThemeSwitcher />
-
-        <div className="mx-auto min-h-screen max-w-lg pb-24">
+        <div
+          className="mx-auto min-h-screen max-w-lg"
+          style={{
+            paddingTop: "var(--tg-content-safe-area-inset-top, 0px)",
+            paddingLeft: "var(--tg-content-safe-area-inset-left, 0px)",
+            paddingRight: "var(--tg-content-safe-area-inset-right, 0px)",
+            paddingBottom:
+              "calc(6rem + var(--tg-content-safe-area-inset-bottom, 0px))",
+          }}
+        >
           {children}
         </div>
 

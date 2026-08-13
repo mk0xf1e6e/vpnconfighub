@@ -15,10 +15,13 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t backdrop-blur"
+      className="fixed inset-x-0 bottom-0 z-50 border-t"
       style={{
-        backgroundColor: "color-mix(in srgb, var(--tg-bg-color) 95%, transparent)",
-        borderColor: "color-mix(in srgb, var(--tg-text-color) 10%, transparent)",
+        backgroundColor:
+          "var(--tg-theme-bottom-bar-bg-color, var(--tg-theme-bg-color, #ffffff))",
+        borderColor:
+          "var(--tg-theme-section-separator-color, var(--tg-theme-secondary-bg-color, #f4f4f5))",
+        paddingBottom: "var(--tg-safe-area-inset-bottom, 0px)",
       }}
     >
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
@@ -29,17 +32,18 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className={`flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs transition ${
-                active ? "font-semibold text-black dark:text-white" : ""
-              }`}
+              className="flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs"
               style={{
-                color: active ? "var(--tg-button-text-color)" : "var(--tg-hint-color)",
+                color: active
+                  ? "var(--tg-theme-text-color, #000000)"
+                  : "var(--tg-theme-hint-color, #71717a)",
               }}
             >
-              <span style={{ color: "inherit", fontSize: "1.25rem" }}>
-                {item.icon}
+              <span className="text-xl">{item.icon}</span>
+
+              <span className={active ? "font-semibold" : undefined}>
+                {item.label}
               </span>
-              <span style={{ color: "inherit" }}>{item.label}</span>
             </Link>
           );
         })}

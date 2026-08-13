@@ -1,15 +1,21 @@
 export default function StorePage() {
   return (
     <main className="px-5 pt-8">
-      <p className="text-sm" style={{ color: "var(--tg-hint-color)" }}>
+      <p
+        className="text-sm"
+        style={{ color: "var(--tg-theme-hint-color, #71717a)" }}
+      >
         VPN Config Hub
       </p>
 
-      <h1 className="mt-1 text-2xl font-bold" style={{ color: "var(--tg-text-color)" }}>
+      <h1
+        className="mt-1 text-2xl font-bold"
+        style={{ color: "var(--tg-theme-text-color, #000000)" }}
+      >
         Store
       </h1>
 
-      <p style={{ color: "var(--tg-hint-color)" }}>
+      <p style={{ color: "var(--tg-theme-hint-color, #71717a)" }}>
         Choose the service that fits your needs.
       </p>
 
@@ -19,26 +25,30 @@ export default function StorePage() {
             key={plan}
             className="rounded-2xl border p-5"
             style={{
-              borderColor: "var(--tg-section-bg-color)",
-              backgroundColor: "var(--tg-secondary-bg-color)",
-              color: "var(--tg-text-color)",
+              borderColor:
+                "var(--tg-theme-section-separator-color, var(--tg-theme-secondary-bg-color, #f4f4f5))",
+              backgroundColor:
+                "var(--tg-theme-section-bg-color, #ffffff)",
+              color: "var(--tg-theme-text-color, #000000)",
             }}
           >
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">{plan}</h2>
 
-              <span style={{ color: "var(--tg-hint-color)" }}>30 days</span>
+              <span style={{ color: "var(--tg-theme-hint-color, #71717a)" }}>
+                30 days
+              </span>
             </div>
 
-            <p style={{ color: "var(--tg-hint-color)" }}>
+            <p style={{ color: "var(--tg-theme-hint-color, #71717a)" }}>
               VPN access with secure configuration.
             </p>
 
             <button
               className="mt-5 w-full rounded-xl px-4 py-3 text-sm font-semibold cursor-pointer"
               style={{
-                backgroundColor: "var(--tg-destructive-text-color)",
-                color: "var(--tg-button-color)",
+                backgroundColor: "var(--tg-theme-button-color, #18181b)",
+                color: "var(--tg-theme-button-text-color, #ffffff)",
               }}
             >
               Choose plan

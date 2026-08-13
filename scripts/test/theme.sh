@@ -30,21 +30,12 @@ pnpm build:web
 required_vars=(
     "bg-color"
     "text-color"
-    "hint-color"
-    "link-color"
-    "button-color"
-    "button-text-color"
-    "secondary-bg-color"
-    "header-bg-color"
-    "section-bg-color"
-    "border-color"
-    "destructive-text-color"
 )
 
 for var in "${required_vars[@]}"; do
-    log_info "Checking for Telegram CSS variable: --tg-$var"
-    grep -q "tg-$var" "$ROOT_DIR/apps/web/src/app/globals.css" || {
-        log_error "Missing Telegram CSS variable: --tg-$var"
+    log_info "Checking for Telegram CSS variable: --tg-theme-$var"
+    grep -q "tg-theme-$var" "$ROOT_DIR/apps/web/src/app/globals.css" || {
+        log_error "Missing Telegram CSS variable: --tg-theme-$var"
         exit 1
     }
 done

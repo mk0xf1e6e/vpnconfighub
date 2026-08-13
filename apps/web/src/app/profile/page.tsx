@@ -7,25 +7,35 @@ export default function ProfilePage() {
 
   return (
     <main className="px-5 pt-8">
-      <p className="text-sm" style={{ color: "var(--tg-hint-color)" }}>
+      <p
+        className="text-sm"
+        style={{ color: "var(--tg-theme-hint-color, #71717a)" }}
+      >
         VPN Config Hub
       </p>
 
-      <h1 className="mt-1 text-2xl font-bold">Profile</h1>
+      <h1
+        className="mt-1 text-2xl font-bold"
+        style={{ color: "var(--tg-theme-text-color, #000000)" }}
+      >
+        Profile
+      </h1>
 
       <div
         className="mt-8 rounded-2xl border p-5"
         style={{
-          borderColor: "var(--tg-section-bg-color)",
-          backgroundColor: "var(--tg-secondary-bg-color)",
+          borderColor:
+            "var(--tg-theme-section-separator-color, var(--tg-theme-secondary-bg-color, #f4f4f5))",
+          backgroundColor:
+            "var(--tg-theme-section-bg-color, #ffffff)",
         }}
       >
         <div className="flex items-center gap-4">
           <div
             className="flex h-14 w-14 items-center justify-center rounded-full"
             style={{
-              backgroundColor: "var(--tg-button-color)",
-              color: "var(--tg-button-text-color)",
+              backgroundColor: "var(--tg-theme-button-color, #18181b)",
+              color: "var(--tg-theme-button-text-color, #ffffff)",
             }}
           >
             {user?.first_name?.charAt(0) ?? "?"}
@@ -34,7 +44,7 @@ export default function ProfilePage() {
           <div>
             <p
               className="font-semibold"
-              style={{ color: "var(--tg-text-color)" }}
+              style={{ color: "var(--tg-theme-text-color, #000000)" }}
             >
               {user
                 ? `${user.first_name}${user.last_name ? ` ${user.last_name}` : ""}`
@@ -43,7 +53,7 @@ export default function ProfilePage() {
 
             <p
               className="text-sm"
-              style={{ color: "var(--tg-hint-color)" }}
+              style={{ color: "var(--tg-theme-hint-color, #71717a)" }}
             >
               {user?.username
                 ? `@${user.username}`
@@ -58,15 +68,19 @@ export default function ProfilePage() {
       <div
         className="mt-4 rounded-2xl border p-5"
         style={{
-          borderColor: "var(--tg-section-bg-color)",
-          backgroundColor: "var(--tg-secondary-bg-color)",
+          borderColor:
+            "var(--tg-theme-section-separator-color, var(--tg-theme-secondary-bg-color, #f4f4f5))",
+          backgroundColor:
+            "var(--tg-theme-section-bg-color, #ffffff)",
         }}
       >
-        <p style={{ color: "var(--tg-hint-color)" }}>Environment</p>
+        <p style={{ color: "var(--tg-theme-hint-color, #71717a)" }}>
+          Environment
+        </p>
 
         <p
           className="mt-2 font-semibold"
-          style={{ color: "var(--tg-text-color)" }}
+          style={{ color: "var(--tg-theme-text-color, #000000)" }}
         >
           {isTelegram ? "Telegram Mini App" : "Web Browser"}
         </p>
