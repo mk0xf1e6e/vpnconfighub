@@ -7,9 +7,9 @@ const TELEGRAM_SCRIPT_URL = "https://telegram.org/js/telegram-web-app.js?59";
 function initWebApp() {
   const webApp = window.Telegram?.WebApp;
 
-    if (!webApp) {
-      window.dispatchEvent(new Event("telegram:webapp-error"));
-      return;
+  if (!webApp) {
+    window.dispatchEvent(new Event("telegram:webapp-error"));
+    return;
   }
 
   webApp.ready();
@@ -43,6 +43,7 @@ export function TelegramProvider() {
     script.src = TELEGRAM_SCRIPT_URL;
     script.async = true;
     script.onload = initWebApp;
+    script.onerror = () => window.dispatchEvent(new Event("telegram:webapp-error"));
     document.head.appendChild(script);
   }, []);
 

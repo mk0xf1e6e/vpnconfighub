@@ -52,17 +52,6 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
     return <AuthMessage title="Loading Telegram" body="Checking the Mini App environment." />;
   }
 
-  if (state === "browser" && process.env.NODE_ENV !== "production") {
-    return (
-      <TelegramShell>
-        <div className="border-b border-[#eac035]/30 bg-[#eac035]/10 px-4 py-2 text-center text-xs text-[#eac035]">
-          Frontend preview mode. Telegram identity is unavailable in this browser.
-        </div>
-        {children}
-      </TelegramShell>
-    );
-  }
-
   if (state === "browser") {
     return (
       <main className="flex min-h-screen items-center justify-center px-4 py-8">

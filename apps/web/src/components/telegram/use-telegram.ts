@@ -13,9 +13,15 @@ export function useTelegram() {
     const sync = () => {
       const app = window.Telegram?.WebApp;
 
-      if (app?.initData) {
+      if (app?.initData && app.initDataUnsafe.user) {
         setWebApp(app);
         setState(app.initDataUnsafe.user ? "telegram" : "error");
+        return;
+      }
+
+      if (app) {
+        setWebApp(app);
+        setState("error");
         return;
       }
 
