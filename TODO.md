@@ -22,6 +22,8 @@
 - [x] No public frontend application port
 - [x] CI lint/typecheck/build
 - [x] CI Docker build
+- [x] Frontend-only production Compose stack
+- [x] Nginx frontend reverse proxy configuration
 - [ ] Nginx HTTPS routing
 - [ ] Cloudflare origin configuration
 - [ ] VPS deployment workflow
