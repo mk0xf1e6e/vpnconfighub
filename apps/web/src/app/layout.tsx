@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import { BottomNav } from "@/components/layout/bottom-nav";
 import { TelegramProvider } from "@/components/telegram/telegram-provider";
+import { DevThemeSwitcher } from "@/components/telegram/dev-theme-switcher";
 
 export const metadata: Metadata = {
   title: "VPN Config Hub",
@@ -16,13 +17,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-zinc-50 text-zinc-950 antialiased dark:bg-zinc-950 dark:text-white">
+      <body className="min-h-screen antialiased">
         <Script
           src="https://telegram.org/js/telegram-web-app.js?59"
           strategy="beforeInteractive"
         />
 
         <TelegramProvider />
+
+        <DevThemeSwitcher />
 
         <div className="mx-auto min-h-screen max-w-lg pb-24">
           {children}

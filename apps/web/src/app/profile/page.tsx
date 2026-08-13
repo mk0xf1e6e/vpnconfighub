@@ -42,7 +42,7 @@ export default function ProfilePage() {
             </p>
 
             <p
-              className="text-sm text-zinc-500"
+              className="text-sm"
               style={{ color: "var(--tg-hint-color)" }}
             >
               {user?.username

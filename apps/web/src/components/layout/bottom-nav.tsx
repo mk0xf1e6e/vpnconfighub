@@ -15,9 +15,10 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/95 backdrop-blur dark:bg-zinc-950/95"
+      className="fixed inset-x-0 bottom-0 z-50 border-t backdrop-blur"
       style={{
-        borderTopColor: "var(--tg-section-bg-color)",
+        backgroundColor: "color-mix(in srgb, var(--tg-bg-color) 95%, transparent)",
+        borderColor: "color-mix(in srgb, var(--tg-text-color) 10%, transparent)",
       }}
     >
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">

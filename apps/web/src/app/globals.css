@@ -1,23 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --tg-bg-color: var(--tg-theme-bg-color, #ffffff);
-  --tg-text-color: var(--tg-theme-text-color, #000000);
-  --tg-hint-color: var(--tg-theme-hint-color, #71717a);
-  --tg-link-color: var(--tg-theme-link-color, #2563eb);
-  --tg-button-color: var(--tg-theme-button-color, #09090b);
-  --tg-button-text-color: var(--tg-theme-button-text-color, #ffffff);
-  --tg-secondary-bg-color: var(--tg-theme-secondary-bg-color, #f4f4f5);
-  --tg-header-bg-color: var(--tg-theme-header-bg-color, #ffffff);
-  --tg-section-bg-color: var(--tg-theme-section-bg-color, #ffffff);
-  --tg-border-color: var(--tg-theme-section-bg-color, #e4e4e7);
-  --tg-destructive-text-color: var(--tg-theme-destructive-text-color, #ef4444);
-}
+  --tg-bg-color: #ffffff;
+  --tg-text-color: #18181b;
+  --tg-hint-color: #71717a;
+  --tg-link-color: #2563eb;
+  --tg-button-color: #18181b;
+  --tg-button-text-color: #ffffff;
+  --tg-secondary-bg-color: #f4f4f5;
+  --tg-header-bg-color: #ffffff;
+  --tg-accent-text-color: #2563eb;
+  --tg-section-bg-color: #ffffff;
+  --tg-section-header-text-color: #18181b;
+  --tg-subtitle-text-color: #71717a;
+  --tg-destructive-text-color: #dc2626;
+  --tg-border-color: #27272a;
 
-html.dark {
-  --tg-dark-bg: var(--tg-theme-bg-color, #0f0f0f);
-  --tg-dark-text: var(--tg-theme-text-color, #ffffff);
-  --tg-dark-border: var(--tg-theme-secondary-bg-color, #27272a);
+  color-scheme: light;
 }
 
 * {
@@ -28,18 +27,10 @@ html,
 body {
   margin: 0;
   padding: 0;
+  background: var(--tg-bg-color);
+  color: var(--tg-text-color);
 }
 
-@theme {
-  --color-tg-bg: var(--tg-bg-color);
-  --color-tg-text: var(--tg-text-color);
-  --color-tg-hint: var(--tg-hint-color);
-  --color-tg-link: var(--tg-link-color);
-  --color-tg-button: var(--tg-button-color);
-  --color-tg-button-text: var(--tg-button-text-color);
-  --color-tg-secondary-bg: var(--tg-secondary-bg-color);
-  --color-tg-header-bg: var(--tg-header-bg-color);
-  --color-tg-section-bg: var(--tg-section-bg-color);
-  --color-tg-border: var(--tg-border-color);
-  --color-tg-destructive-text: var(--tg-destructive-text-color);
+body {
+  min-height: 100vh;
 }
