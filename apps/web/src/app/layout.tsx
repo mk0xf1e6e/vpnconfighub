@@ -5,7 +5,7 @@ import { BottomNav } from "@/components/layout/bottom-nav";
 import { TelegramProvider } from "@/components/telegram/telegram-provider";
 import { DevThemeSwitcher } from "@/components/telegram/dev-theme-switcher";
 
-export const metadata: Metadata = {
+export const metaMetadata = {
   title: "VPN Config Hub",
   description: "VPN and proxy services",
 };
