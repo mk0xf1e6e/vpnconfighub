@@ -5,4 +5,4 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 cd "$ROOT_DIR"
 
-exec pnpm --filter web dev
+exec pnpm dev:web

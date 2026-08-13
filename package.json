@@ -1,17 +1,11 @@
 {
-  "name": "vpn-config-hub",
-  "version": "0.0.0",
+  "name": "vpnconfighub",
   "private": true,
-  "type": "module",
+  "version": "0.1.0",
+  "packageManager": "pnpm@10.17.1",
   "scripts": {
-    "build": "pnpm --recursive run build",
-    "dev": "pnpm --filter web dev",
-    "lint": "pnpm --recursive run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
-  },
-  "devDependencies": {
-    "prettier": "^3.3.0",
-    "typescript": "^5.5.0"
-  },
-  "packageManager": "pnpm@10.17.1"
+    "dev:web": "pnpm --filter ./apps/web dev",
+    "build:web": "pnpm --filter ./apps/web build",
+    "lint:web": "pnpm --filter ./apps/web lint"
+  }
 }
