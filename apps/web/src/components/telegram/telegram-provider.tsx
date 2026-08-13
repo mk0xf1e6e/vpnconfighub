@@ -7,8 +7,9 @@ const TELEGRAM_SCRIPT_URL = "https://telegram.org/js/telegram-web-app.js?59";
 function initWebApp() {
   const webApp = window.Telegram?.WebApp;
 
-  if (!webApp) {
-    return;
+    if (!webApp) {
+      window.dispatchEvent(new Event("telegram:webapp-error"));
+      return;
   }
 
   webApp.ready();
