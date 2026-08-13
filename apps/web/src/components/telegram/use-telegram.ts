@@ -1,24 +1,33 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import type { TelegramUser, TelegramWebApp } from "@/types/telegram";
+import type { TelegramWebApp } from "@/types/telegram";
 
 export function useTelegram() {
   const [webApp, setWebApp] = useState<TelegramWebApp | null>(null);
 
   useEffect(() => {
-    const app = window.Telegram?.WebApp;
-    if (!app) {
-      return;
-    }
+    const sync = () => {
+      const app = window.Telegram?.WebApp;
 
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setWebApp(app);
+      if (!app) {
+        return;
+      }
+
+      setWebApp(app);
+    };
+
+    sync();
+    window.addEventListener("telegram:webapp-ready", sync);
+
+    return () => {
+      window.removeEventListener("telegram:webapp-ready", sync);
+    };
   }, []);
 
   return {
     webApp,
     user: webApp?.initDataUnsafe?.user ?? null,
-    isTelegram: Boolean(webApp && webApp.initData),
+    isTelegram: Boolean(webApp),
   };
 }

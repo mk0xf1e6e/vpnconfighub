@@ -1,7 +1,6 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { TelegramHeader } from "@/components/layout/telegram-header";
 import { BottomNav } from "@/components/layout/bottom-nav";
 
 interface TelegramShellProps {
@@ -13,8 +12,10 @@ export function TelegramShell({ children }: TelegramShellProps) {
     <div className="min-h-screen w-full bg-[#0e1621] text-[#f5f5f5] antialiased sm:flex sm:items-center sm:justify-center sm:py-6">
       {/* Phone frame container */}
       <div className="relative min-h-screen w-full bg-[#17212b] shadow-2xl sm:min-h-[840px] sm:max-w-[420px] sm:overflow-hidden sm:rounded-[32px] sm:border sm:border-[#2b394a]">
-        {/* Header */}
-        <TelegramHeader />
+        <header className="sticky top-0 z-40 border-b border-[#2b394a] bg-[#17212b] px-4 py-3 shadow-md">
+          <p className="text-sm font-semibold text-[#f5f5f5]">VPN Config Hub</p>
+          <p className="text-xs text-[#7f8c99]">Telegram account connected</p>
+        </header>
 
         {/* Scrollable Content Container */}
         <main

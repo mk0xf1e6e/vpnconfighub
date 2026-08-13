@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { TelegramProvider } from "@/components/telegram/telegram-provider";
-import { TelegramShell } from "@/components/layout/telegram-shell";
+import { TelegramAppFrame } from "@/components/layout/telegram-app-frame";
 
 export const metadata: Metadata = {
   title: "VPN Config Hub",
@@ -25,7 +25,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-[#0e1621] text-[#f5f5f5] antialiased">
         <TelegramProvider />
-        <TelegramShell>{children}</TelegramShell>
+        <TelegramAppFrame>{children}</TelegramAppFrame>
       </body>
     </html>
   );

@@ -22,6 +22,7 @@ function initWebApp() {
   };
 
   webApp.onEvent("themeChanged", handleThemeChanged);
+  window.dispatchEvent(new Event("telegram:webapp-ready"));
 
   return () => {
     webApp.offEvent("themeChanged", handleThemeChanged);
