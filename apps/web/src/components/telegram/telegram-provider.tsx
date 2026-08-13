@@ -3,6 +3,8 @@
 import { useEffect } from "react";
 import type { TelegramThemeParams } from "@/types/telegram";
 
+const TELEGRAM_SCRIPT_URL = "https://telegram.org/js/telegram-web-app.js?59";
+
 const themeVariables: Record<keyof TelegramThemeParams, string> = {
   bg_color: "--tg-bg-color",
   text_color: "--tg-text-color",
@@ -33,18 +35,38 @@ function applyTheme(theme: TelegramThemeParams) {
   }
 }
 
+function initWebApp() {
+  const webApp = window.Telegram?.WebApp;
+
+  if (!webApp) {
+    return;
+  }
+
+  webApp.ready();
+  webApp.expand();
+
+  const onThemeChanged = () => applyTheme(webApp.themeParams);
+
+  applyTheme(webApp.themeParams);
+  webApp.onEvent("themeChanged", onThemeChanged);
+
+  return () => webApp.offEvent("themeChanged", onThemeChanged);
+}
+
 export function TelegramProvider() {
   useEffect(() => {
-    const webApp = window.Telegram?.WebApp;
+    const existing = document.getElementById("telegram-web-app");
 
-    if (!webApp) {
-      return;
+    if (existing) {
+      return initWebApp();
     }
 
-    webApp.ready();
-    webApp.expand();
-
-    applyTheme(webApp.themeParams);
+    const script = document.createElement("script");
+    script.id = "telegram-web-app";
+    script.src = TELEGRAM_SCRIPT_URL;
+    script.async = true;
+    script.onload = initWebApp;
+    document.head.appendChild(script);
   }, []);
 
   return null;

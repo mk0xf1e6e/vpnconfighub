@@ -9,7 +9,6 @@ log_info "Checking project structure..."
 
 required_dirs=(
     "apps/web"
-    "apps/admin"
     "services/api"
     "services/bot"
     "services/worker"
