@@ -39,14 +39,10 @@ function formatUsername(account: TelegramUser | null) {
 export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
   const { state, user } = useTelegram();
 
-  const telegramBotUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME;
-  const openTelegramHref = useMemo(() => {
-    if (!telegramBotUsername) {
-      return null;
-    }
-
-    return `https://t.me/${telegramBotUsername}`;
-  }, [telegramBotUsername]);
+  const openTelegramHref = useMemo(
+    () => process.env.NEXT_PUBLIC_TELEGRAM_APP_URL || null,
+    [],
+  );
 
   if (state === "loading") {
     return <AuthMessage title="Loading Telegram" body="Checking the Mini App environment." />;
