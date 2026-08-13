@@ -8,6 +8,8 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
         NEXT_PUBLIC_TELEGRAM_APP_URL: ${NEXT_PUBLIC_TELEGRAM_APP_URL:-}
     restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-}
@@ -20,21 +22,6 @@ services:
       interval: 30s
       timeout: 5s
       retries: 3
-
-  nginx:
-    image: nginx:1.27-alpine
-    restart: unless-stopped
-    depends_on:
-      - frontend
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./nginx/frontend.conf:/etc/nginx/conf.d/default.conf:ro
-      - ./nginx/certs:/etc/nginx/certs:ro
-      - ./nginx/www:/var/www/certbot:ro
-    networks:
-      - vpnhub
 
 networks:
   vpnhub:
