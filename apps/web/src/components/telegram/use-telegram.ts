@@ -28,6 +28,6 @@ export function useTelegram() {
   return {
     webApp,
     user: webApp?.initDataUnsafe?.user ?? null,
-    isTelegram: Boolean(webApp),
+    isTelegram: Boolean(webApp?.initData),
   };
 }

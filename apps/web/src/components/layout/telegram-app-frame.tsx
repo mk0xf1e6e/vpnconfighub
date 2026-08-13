@@ -6,7 +6,7 @@ import { TelegramShell } from "@/components/layout/telegram-shell";
 import { useTelegram } from "@/components/telegram/use-telegram";
 import { authenticateTelegram, type TelegramAccount } from "@/lib/api/client";
 
-type AuthState = "AUTHENTICATED" | "AUTH_ERROR";
+type AuthState = "AUTHENTICATING" | "AUTHENTICATED" | "AUTH_ERROR";
 
 interface TelegramAppFrameProps {
   children: ReactNode;
@@ -71,13 +71,13 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
   const telegramBotUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME;
   const openTelegramHref = useMemo(() => {
     if (!telegramBotUsername) {
-      return "https://t.me/";
+      return null;
     }
 
     return `https://t.me/${telegramBotUsername}`;
   }, [telegramBotUsername]);
 
-  if (!webApp) {
+  if (!webApp?.initData) {
     return (
       <main className="flex min-h-screen items-center justify-center px-4 py-8">
         <section className="w-full max-w-md rounded-3xl border border-[#2b394a] bg-[#17212b] p-6 text-center shadow-2xl">
@@ -86,14 +86,20 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
           <p className="mt-3 text-sm leading-6 text-[#7f8c99]">
             VPN Config Hub works through Telegram.
           </p>
-          <a
-            href={openTelegramHref}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-[#2aabee] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
-          >
-            Open in Telegram
-          </a>
+          {openTelegramHref ? (
+            <a
+              href={openTelegramHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-6 inline-flex w-full items-center justify-center rounded-2xl bg-[#2aabee] px-5 py-3 text-sm font-semibold text-white transition hover:opacity-90"
+            >
+              Open in Telegram
+            </a>
+          ) : (
+            <p className="mt-6 rounded-2xl border border-[#eac035]/40 bg-[#eac035]/10 px-5 py-3 text-sm text-[#eac035]">
+              Telegram Mini App URL is not configured.
+            </p>
+          )}
           <p className="mt-3 text-xs text-[#7f8c99]">
             Already opened Telegram? Reload the Mini App.
           </p>
@@ -118,14 +124,16 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
           >
             Try Again
           </button>
-          <a
-            href={openTelegramHref}
-            target="_blank"
-            rel="noreferrer"
-            className="mt-3 inline-flex w-full items-center justify-center rounded-2xl border border-[#2b394a] bg-[#1f2936] px-5 py-3 text-sm font-semibold text-[#f5f5f5] transition hover:border-[#2aabee]"
-          >
-            Open in Telegram
-          </a>
+          {openTelegramHref ? (
+            <a
+              href={openTelegramHref}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-3 inline-flex w-full items-center justify-center rounded-2xl border border-[#2b394a] bg-[#1f2936] px-5 py-3 text-sm font-semibold text-[#f5f5f5] transition hover:border-[#2aabee]"
+            >
+              Open in Telegram
+            </a>
+          ) : null}
         </section>
       </main>
     );
