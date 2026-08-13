@@ -9,6 +9,7 @@ RUN pnpm install --frozen-lockfile --filter ./apps/web...
 FROM node:20-alpine AS builder
 WORKDIR /app
 ENV NEXT_TELEMETRY_DISABLED=1
+ENV HOSTNAME=0.0.0.0
 RUN corepack enable
 RUN corepack prepare pnpm@10.17.1 --activate
 ARG NEXT_PUBLIC_APP_URL
