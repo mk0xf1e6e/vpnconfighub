@@ -1,11 +1,15 @@
 export default function StorePage() {
   return (
     <main className="px-5 pt-8">
-      <p className="text-sm text-zinc-500">VPN Config Hub</p>
+      <p className="text-sm" style={{ color: "var(--tg-hint-color)" }}>
+        VPN Config Hub
+      </p>
 
-      <h1 className="mt-1 text-2xl font-bold">Store</h1>
+      <h1 className="mt-1 text-2xl font-bold" style={{ color: "var(--tg-text-color)" }}>
+        Store
+      </h1>
 
-      <p className="mt-2 text-sm text-zinc-500">
+      <p style={{ color: "var(--tg-hint-color)" }}>
         Choose the service that fits your needs.
       </p>
 
@@ -13,19 +17,30 @@ export default function StorePage() {
         {["Basic", "Standard", "Pro"].map((plan) => (
           <div
             key={plan}
-            className="rounded-2xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900"
+            className="rounded-2xl border p-5"
+            style={{
+              borderColor: "var(--tg-section-bg-color)",
+              backgroundColor: "var(--tg-secondary-bg-color)",
+              color: "var(--tg-text-color)",
+            }}
           >
             <div className="flex items-center justify-between">
               <h2 className="font-semibold">{plan}</h2>
 
-              <span className="text-sm text-zinc-500">30 days</span>
+              <span style={{ color: "var(--tg-hint-color)" }}>30 days</span>
             </div>
 
-            <p className="mt-2 text-sm text-zinc-500">
+            <p style={{ color: "var(--tg-hint-color)" }}>
               VPN access with secure configuration.
             </p>
 
-            <button className="mt-5 w-full rounded-xl bg-zinc-950 px-4 py-3 text-sm font-semibold text-white dark:bg-white dark:text-zinc-950">
+            <button
+              className="mt-5 w-full rounded-xl px-4 py-3 text-sm font-semibold cursor-pointer"
+              style={{
+                backgroundColor: "var(--tg-destructive-text-color)",
+                color: "var(--tg-button-color)",
+              }}
+            >
               Choose plan
             </button>
           </div>

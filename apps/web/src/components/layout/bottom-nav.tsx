@@ -14,7 +14,12 @@ export function BottomNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-zinc-200 bg-white/95 backdrop-blur dark:border-zinc-800 dark:bg-zinc-950/95">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-50 border-t bg-white/95 backdrop-blur dark:bg-zinc-950/95"
+      style={{
+        borderTopColor: "var(--tg-section-bg-color)",
+      }}
+    >
       <div className="mx-auto flex max-w-lg items-center justify-around px-2 py-2">
         {items.map((item) => {
           const active = pathname === item.href;
@@ -24,13 +29,16 @@ export function BottomNav() {
               key={item.href}
               href={item.href}
               className={`flex min-w-16 flex-col items-center gap-1 rounded-xl px-3 py-2 text-xs transition ${
-                active
-                  ? "font-semibold text-black dark:text-white"
-                  : "text-zinc-500"
+                active ? "font-semibold text-black dark:text-white" : ""
               }`}
+              style={{
+                color: active ? "var(--tg-button-text-color)" : "var(--tg-hint-color)",
+              }}
             >
-              <span className="text-xl">{item.icon}</span>
-              <span>{item.label}</span>
+              <span style={{ color: "inherit", fontSize: "1.25rem" }}>
+                {item.icon}
+              </span>
+              <span style={{ color: "inherit" }}>{item.label}</span>
             </Link>
           );
         })}

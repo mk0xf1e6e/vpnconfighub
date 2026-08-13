@@ -33,6 +33,9 @@ export interface TelegramWebApp {
     onClick(callback: () => void): void;
     offClick(callback: () => void): void;
   };
+
+  onEvent(eventType: string, eventHandler: () => void): void;
+  offEvent(eventType: string, eventHandler: () => void): void;
 }
 
 declare global {
