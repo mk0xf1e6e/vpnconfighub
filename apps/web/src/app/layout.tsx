@@ -15,6 +15,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+          crossOrigin="anonymous"
+          referrerPolicy="no-referrer"
+        />
+      </head>
       <body className="min-h-screen bg-[#0e1621] text-[#f5f5f5] antialiased">
         <TelegramProvider />
         <TelegramShell>{children}</TelegramShell>

@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useTelegram } from "@/components/telegram/use-telegram";
 import { PlanCard, type SubscriptionPlan } from "@/components/shop/plan-card";
 import { CheckoutModal } from "@/components/shop/checkout-modal";
 
@@ -10,7 +9,7 @@ const PLANS: SubscriptionPlan[] = [
     id: "basic",
     name: "Basic Shield",
     starsPriceMonthly: 50,
-    starsPriceAnnual: 480, // 20% discount
+    starsPriceAnnual: 480,
     usdEquivalentMonthly: 1.0,
     speed: "100 Mbps",
     quota: "50 GB / mo",
@@ -57,14 +56,11 @@ const PLANS: SubscriptionPlan[] = [
       "10 Active Devices",
       "Global Premium Server Nodes",
       "Priority Traffic Routing",
-      "Dedicated Residential IPs",
-      "24/7 VIP Support",
     ],
   },
 ];
 
 export default function StorePage() {
-  const { user } = useTelegram();
   const [billingPeriod, setBillingPeriod] = useState<"monthly" | "annual">("monthly");
   const [selectedPlan, setSelectedPlan] = useState<SubscriptionPlan | null>(null);
 
@@ -74,22 +70,15 @@ export default function StorePage() {
 
   return (
     <div className="p-4 space-y-5">
-      {/* Header */}
       <header>
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-xl font-bold text-[#f5f5f5]">Subscription Store</h1>
             <p className="text-xs text-[#7f8c99]">Choose the plan that fits your needs</p>
           </div>
-
-          <div className="flex items-center gap-1.5 rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1 text-xs font-semibold text-[#f5f5f5]">
-            <span className="text-[#eac035]">⭐</span>
-            <span>{user.stars_balance ?? 150} Stars</span>
-          </div>
         </div>
       </header>
 
-      {/* Billing Cycle Toggle */}
       <div className="flex items-center justify-center">
         <div className="flex rounded-xl border border-[#2b394a] bg-[#1f2936] p-1 text-xs">
           <button
@@ -121,7 +110,6 @@ export default function StorePage() {
         </div>
       </div>
 
-      {/* Plan Cards List */}
       <div className="space-y-4">
         {PLANS.map((plan) => (
           <PlanCard
@@ -133,12 +121,10 @@ export default function StorePage() {
         ))}
       </div>
 
-      {/* Checkout Order Modal */}
       {selectedPlan && (
         <CheckoutModal
           plan={selectedPlan}
           billingPeriod={billingPeriod}
-          userStarsBalance={user.stars_balance ?? 150}
           onClose={() => setSelectedPlan(null)}
           onConfirmPurchase={handleConfirmPurchase}
         />
