@@ -53,5 +53,6 @@ log_success "Project structure is valid."
 
 "$ROOT_DIR/scripts/test/backend.sh"
 "$ROOT_DIR/scripts/test/frontend.sh"
+"$ROOT_DIR/scripts/test/telegram.sh"
 
 log_success "All project checks passed."
