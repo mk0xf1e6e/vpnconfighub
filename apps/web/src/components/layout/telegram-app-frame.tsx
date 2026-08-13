@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { TelegramShell } from "@/components/layout/telegram-shell";
 import { useTelegram } from "@/components/telegram/use-telegram";
 import { authenticateTelegram, type TelegramAccount } from "@/lib/api/client";
@@ -12,16 +12,22 @@ interface TelegramAppFrameProps {
   children: ReactNode;
 }
 
+const TelegramAccountContext = createContext<TelegramAccount | null>(null);
+
+export function useTelegramAccount() {
+  return useContext(TelegramAccountContext);
+}
+
 function formatName(account: TelegramAccount | null) {
   if (!account) {
     return "Telegram user";
   }
 
-  const firstName = account.first_name?.trim();
-  const lastName = account.last_name?.trim();
+  const firstName = account.firstName?.trim();
+  const lastName = account.lastName?.trim();
   const fullName = [firstName, lastName].filter(Boolean).join(" ").trim();
 
-  return fullName || account.username || `Telegram user #${account.id ?? "?"}`;
+  return fullName || account.username || `Telegram user #${account.telegramId}`;
 }
 
 function formatUsername(account: TelegramAccount | null) {
@@ -103,6 +109,13 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
           <p className="mt-3 text-xs text-[#7f8c99]">
             Already opened Telegram? Reload the Mini App.
           </p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-3 text-xs font-semibold text-[#2aabee] hover:underline"
+          >
+            Try Again
+          </button>
         </section>
       </main>
     );
@@ -151,17 +164,22 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
     );
   }
 
+  if (!account) {
+    return null;
+  }
+
   return (
-    <TelegramShell>
+    <TelegramAccountContext.Provider value={account}>
+      <TelegramShell>
       <div className="space-y-4 p-4">
         <section className="rounded-2xl border border-[#2b394a] bg-[#242f3d] p-5 shadow-lg">
           <div className="flex items-start gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2aabee] text-lg font-bold text-white">
               <span
                 className="flex h-full w-full items-center justify-center bg-cover bg-center"
-                style={account?.photo_url ? { backgroundImage: `url(${account.photo_url})` } : undefined}
+                style={account?.photoUrl ? { backgroundImage: `url(${account.photoUrl})` } : undefined}
               >
-                {!account?.photo_url ? formatName(account).slice(0, 1).toUpperCase() : null}
+                {!account?.photoUrl ? formatName(account).slice(0, 1).toUpperCase() : null}
               </span>
             </div>
 
@@ -170,13 +188,10 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
               <p className="truncate text-sm text-[#7f8c99]">{formatUsername(account) ?? "Authenticated via Telegram"}</p>
               <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-[#f5f5f5]">
                 <span className="rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1">
-                  ID {account?.id ?? "n/a"}
-                </span>
-                <span className="rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1 text-[#eac035]">
-                  ⭐ {account?.stars ?? "n/a"}
+                  ID {account?.telegramId ?? "n/a"}
                 </span>
                 <span className="rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1 text-[#7f8c99]">
-                  {account?.planName ?? account?.plan_name ?? "Account loaded from backend"}
+                  Account loaded from backend
                 </span>
               </div>
             </div>
@@ -185,6 +200,7 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
 
         {children}
       </div>
-    </TelegramShell>
+      </TelegramShell>
+    </TelegramAccountContext.Provider>
   );
 }

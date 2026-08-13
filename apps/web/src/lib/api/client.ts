@@ -2,14 +2,12 @@ const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080";
 
 export interface TelegramAccount {
-  id?: number;
-  first_name?: string;
-  last_name?: string;
+  id: number;
+  telegramId: number;
+  firstName: string;
+  lastName?: string;
   username?: string;
-  photo_url?: string;
-  stars?: number;
-  plan_name?: string;
-  planName?: string;
+  photoUrl?: string;
 }
 
 export interface TelegramAuthResponse {
@@ -26,6 +24,7 @@ export async function authenticateTelegram(initData: string): Promise<TelegramAu
       "Content-Type": "application/json",
     },
     cache: "no-store",
+    credentials: "include",
     body: JSON.stringify({ initData }),
   });
 

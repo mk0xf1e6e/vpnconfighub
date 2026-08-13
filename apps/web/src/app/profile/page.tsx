@@ -1,9 +1,9 @@
 "use client";
 
-import { useTelegram } from "@/components/telegram/use-telegram";
+import { useTelegramAccount } from "@/components/layout/telegram-app-frame";
 
 export default function ProfilePage() {
-  const { user, isTelegram } = useTelegram();
+  const account = useTelegramAccount();
 
   return (
     <div className="p-4 space-y-4">
@@ -15,27 +15,27 @@ export default function ProfilePage() {
       <div className="rounded-2xl border border-[#2b394a] bg-[#242f3d] p-5 shadow-lg">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#2aabee] text-xl font-bold text-white">
-            {user ? (user.first_name ? user.first_name.charAt(0) : "?") : "?"}
+            {account ? account.firstName.charAt(0) : "?"}
           </div>
 
           <div>
-            {user ? (
+            {account ? (
               <>
                 <p className="font-bold text-[#f5f5f5]">
-                  {user.first_name} {user.last_name || ""}
+                  {account.firstName} {account.lastName || ""}
                 </p>
                 <p className="text-xs text-[#7f8c99]">
-                  {user.username ? `@${user.username}` : `ID: ${user.id}`}
+                  {account.username ? `@${account.username}` : `ID: ${account.telegramId}`}
                 </p>
                 <p className="mt-1 text-[11px] text-[#7f8c99]">
-                  {isTelegram ? "Telegram Mini App" : "Web Browser"}
+                  Telegram Mini App
                 </p>
               </>
             ) : (
               <>
                 <p className="font-bold text-[#7f8c99]">Not available</p>
                 <p className="text-xs text-[#7f8c99]">
-                  {isTelegram ? "Loading..." : "Not running in Telegram"}
+                  Loading authenticated account
                 </p>
               </>
             )}
