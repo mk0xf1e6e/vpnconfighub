@@ -16,12 +16,12 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#2b394a] bg-[#17212b]"
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-[#2b394a] bg-[#17212b]/95 backdrop-blur"
       style={{
         paddingBottom: "var(--tg-safe-area-inset-bottom, 0px)",
       }}
     >
-      <div className="mx-auto flex max-w-lg items-center justify-around px-1 py-1.5">
+      <div className="mx-auto flex w-full max-w-3xl items-center justify-around px-2 py-2">
         {items.map((item) => {
           const active = pathname === item.href;
 
@@ -29,7 +29,7 @@ export function BottomNav() {
             <Link
               key={item.href}
               href={item.href}
-              className="flex flex-col items-center py-1 px-3 transition"
+              className="flex min-h-11 min-w-14 flex-col items-center justify-center rounded-xl px-2 py-1 transition"
               style={{
                 color: active ? "#2aabee" : "#7f8c99",
               }}

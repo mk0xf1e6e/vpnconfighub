@@ -67,6 +67,27 @@ export default function StorePage() {
     setSelection((current) => ({ ...current, [key]: value }));
   };
 
+  const entitlementOptions = (
+    <div className="space-y-5">
+      <h3 className="text-sm font-bold text-[#f5f5f5]">Available configuration options</h3>
+      <OptionGroup label="Protocol" options={family.protocols.map((protocol) => ({ value: protocol, label: protocol }))} value={selection.protocol} onChange={(value) => update("protocol", value)} />
+      <OptionGroup label="Traffic quota" options={QUOTA_OPTIONS} value={selection.quota} onChange={(value) => update("quota", value as QuotaOption)} />
+      <OptionGroup label="Speed cap" options={SPEED_OPTIONS} value={selection.speed} onChange={(value) => update("speed", value as SpeedOption)} />
+      <OptionGroup label="Duration" options={DURATION_OPTIONS} value={selection.durationDays} onChange={(value) => update("durationDays", value as DurationOption)} />
+      <OptionGroup label="Allowed devices" options={DEVICE_OPTIONS} value={selection.devices} onChange={(value) => update("devices", value as DeviceOption)} />
+      <div className="rounded-xl border border-[#2aabee]/40 bg-[#1f2936] p-3 text-xs text-[#7f8c99]">
+        <p className="font-bold text-[#f5f5f5]">Selection summary</p>
+        <p className="mt-1">{family.name} · {selection.protocol}</p>
+        <p>{selection.quota === "unlimited" ? "Unlimited traffic" : `${selection.quota} GB traffic`} · {selection.speed === "uncapped" ? "Uncapped speed" : `${selection.speed} Mbps cap`}</p>
+        <p>{selection.durationDays} days · {selection.devices} device{selection.devices === 1 ? "" : "s"}</p>
+        <p className="mt-2 text-[#eac035]">Price unavailable until pricing is approved.</p>
+      </div>
+      <button type="button" onClick={() => setSelectedForCheckout(true)} className="w-full rounded-xl bg-[#2aabee] py-3 text-xs font-bold text-white transition hover:bg-[#229ed9]">
+        Review configuration
+      </button>
+    </div>
+  );
+
   return (
     <div className="space-y-5 p-4">
       <header>
@@ -81,31 +102,11 @@ export default function StorePage() {
         <h2 className="mb-3 text-sm font-bold text-[#f5f5f5]">1. Choose a service</h2>
         <div className="space-y-3">
           {PRODUCT_FAMILIES.map((product) => (
-            <PlanCard key={product.id} product={product} selected={product.id === selection.family} onSelect={() => changeFamily(product.id)} />
+            <PlanCard key={product.id} product={product} selected={product.id === selection.family} onSelect={() => changeFamily(product.id)}>
+              {entitlementOptions}
+            </PlanCard>
           ))}
         </div>
-      </section>
-
-      <section className="space-y-5 rounded-2xl border border-[#2b394a] bg-[#242f3d] p-4">
-        <h2 className="text-sm font-bold text-[#f5f5f5]">2. Configure entitlements</h2>
-
-        <OptionGroup label="Protocol" options={family.protocols.map((protocol) => ({ value: protocol, label: protocol }))} value={selection.protocol} onChange={(value) => update("protocol", value)} />
-        <OptionGroup label="Traffic quota" options={QUOTA_OPTIONS} value={selection.quota} onChange={(value) => update("quota", value as QuotaOption)} />
-        <OptionGroup label="Speed cap" options={SPEED_OPTIONS} value={selection.speed} onChange={(value) => update("speed", value as SpeedOption)} />
-        <OptionGroup label="Duration" options={DURATION_OPTIONS} value={selection.durationDays} onChange={(value) => update("durationDays", value as DurationOption)} />
-        <OptionGroup label="Allowed devices" options={DEVICE_OPTIONS} value={selection.devices} onChange={(value) => update("devices", value as DeviceOption)} />
-
-        <div className="rounded-xl border border-[#2aabee]/40 bg-[#1f2936] p-3 text-xs text-[#7f8c99]">
-          <p className="font-bold text-[#f5f5f5]">Selection summary</p>
-          <p className="mt-1">{family.name} · {selection.protocol}</p>
-          <p>{selection.quota === "unlimited" ? "Unlimited traffic" : `${selection.quota} GB traffic`} · {selection.speed === "uncapped" ? "Uncapped speed" : `${selection.speed} Mbps cap`}</p>
-          <p>{selection.durationDays} days · {selection.devices} device{selection.devices === 1 ? "" : "s"}</p>
-          <p className="mt-2 text-[#eac035]">Draft pricing: unavailable until pricing is approved.</p>
-        </div>
-
-        <button type="button" onClick={() => setSelectedForCheckout(true)} className="w-full rounded-xl bg-[#2aabee] py-3 text-xs font-bold text-white transition hover:bg-[#229ed9]">
-          Review configuration
-        </button>
       </section>
 
       {selectedForCheckout && (

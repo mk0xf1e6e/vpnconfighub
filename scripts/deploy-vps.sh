@@ -23,7 +23,6 @@ git -C "$deploy_path" fetch origin main
 git -C "$deploy_path" reset --hard origin/main
 cd "$deploy_path"
 docker-compose -f "$compose_file" config >/dev/null
-docker-compose -f "$compose_file" rm -sf api frontend || true
 docker-compose -f "$compose_file" build api frontend
 docker-compose -f "$compose_file" up -d api frontend
 deadline=$(( $(date +%s) + health_timeout ))

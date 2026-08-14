@@ -9,31 +9,18 @@ interface TelegramShellProps {
 
 export function TelegramShell({ children }: TelegramShellProps) {
   return (
-    <div className="min-h-screen w-full bg-[#0e1621] text-[#f5f5f5] antialiased sm:flex sm:items-center sm:justify-center sm:py-6">
-      {/* Phone frame container */}
-      <div className="relative min-h-screen w-full bg-[#17212b] shadow-2xl sm:min-h-[840px] sm:max-w-[420px] sm:overflow-hidden sm:rounded-[32px] sm:border sm:border-[#2b394a]">
-        <header className="sticky top-0 z-40 border-b border-[#2b394a] bg-[#17212b] px-4 py-3 shadow-md">
-          <p className="text-sm font-semibold text-[#f5f5f5]">VPN Config Hub</p>
-          <p className="text-xs text-[#7f8c99]">
-            {process.env.NODE_ENV === "production" ? "Telegram account connected" : "Frontend development mode"}
-          </p>
-        </header>
-
-        {/* Scrollable Content Container */}
-        <main
-          className="pb-24"
-          style={{
-            paddingTop: "var(--tg-content-safe-area-inset-top, 0px)",
-            paddingLeft: "var(--tg-content-safe-area-inset-left, 0px)",
-            paddingRight: "var(--tg-content-safe-area-inset-right, 0px)",
-          }}
-        >
-          {children}
-        </main>
-
-        {/* Fixed Bottom Navigation */}
-        <BottomNav />
-      </div>
+    <div className="min-h-[100dvh] w-full bg-[#0e1621] text-[#f5f5f5] antialiased">
+      <main
+        className="min-h-[100dvh] pb-24"
+        style={{
+          paddingTop: "var(--tg-content-safe-area-inset-top, 0px)",
+          paddingLeft: "var(--tg-content-safe-area-inset-left, 0px)",
+          paddingRight: "var(--tg-content-safe-area-inset-right, 0px)",
+        }}
+      >
+        {children}
+      </main>
+      <BottomNav />
     </div>
   );
 }

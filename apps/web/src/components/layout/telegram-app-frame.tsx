@@ -16,26 +16,6 @@ export function useTelegramAccount() {
   return useContext(TelegramAccountContext);
 }
 
-function formatName(account: TelegramUser | null) {
-  if (!account) {
-    return "Telegram user";
-  }
-
-  const firstName = account.first_name?.trim();
-  const lastName = account.last_name?.trim();
-  const fullName = [firstName, lastName].filter(Boolean).join(" ").trim();
-
-  return fullName || account.username || `Telegram user #${account.id}`;
-}
-
-function formatUsername(account: TelegramUser | null) {
-  if (!account?.username) {
-    return null;
-  }
-
-  return `@${account.username}`;
-}
-
 export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
   const { state, user } = useTelegram();
 
@@ -85,35 +65,7 @@ export function TelegramAppFrame({ children }: TelegramAppFrameProps) {
   return (
     <TelegramAccountContext.Provider value={user}>
       <TelegramShell>
-      <div className="space-y-4 p-4">
-        <section className="rounded-2xl border border-[#2b394a] bg-[#242f3d] p-5 shadow-lg">
-          <div className="flex items-start gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#2aabee] text-lg font-bold text-white">
-              <span
-                className="flex h-full w-full items-center justify-center bg-cover bg-center"
-                style={user.photo_url ? { backgroundImage: `url(${user.photo_url})` } : undefined}
-              >
-                {!user.photo_url ? formatName(user).slice(0, 1).toUpperCase() : null}
-              </span>
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-lg font-bold text-[#f5f5f5]">{formatName(user)}</p>
-              <p className="truncate text-sm text-[#7f8c99]">{formatUsername(user) ?? "Telegram Mini App user"}</p>
-              <div className="mt-3 flex flex-wrap gap-2 text-xs font-semibold text-[#f5f5f5]">
-                <span className="rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1">
-                  ID {user.id}
-                </span>
-                <span className="rounded-full border border-[#2b394a] bg-[#1f2936] px-3 py-1 text-[#7f8c99]">
-                  Frontend personalization only
-                </span>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {children}
-      </div>
       </TelegramShell>
     </TelegramAccountContext.Provider>
   );
