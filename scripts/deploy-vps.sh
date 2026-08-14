@@ -32,6 +32,7 @@ until [ "$(date +%s)" -ge "$deadline" ]; do
   frontend=$(docker inspect -f '{{.State.Health.Status}}' deploy_frontend_1 2>/dev/null || true)
   if [ "$api" = healthy ] && [ "$frontend" = healthy ]; then break; fi
   sleep 5
+done
 api=$(docker inspect -f '{{.State.Health.Status}}' deploy_api_1)
 frontend=$(docker inspect -f '{{.State.Health.Status}}' deploy_frontend_1)
 [ "$api" = healthy ]
