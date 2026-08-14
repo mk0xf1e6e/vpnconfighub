@@ -91,10 +91,6 @@ func writeDemo(w http.ResponseWriter, r *http.Request, value any) {
 }
 
 func writeJSON(w http.ResponseWriter, r *http.Request, status int, value any) {
-	if r.Method != http.MethodGet {
-		writeJSONError(w, http.StatusMethodNotAllowed, "method not allowed")
-		return
-	}
 	w.Header().Set("Cache-Control", "no-store")
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)

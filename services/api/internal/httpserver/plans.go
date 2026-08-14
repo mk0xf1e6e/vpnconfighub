@@ -61,7 +61,7 @@ func newPlan(id, family, name, description string, protocols []string, quotaGB, 
 	}
 	return plan{
 		ID: id, ProductFamily: family, Name: name, Description: description, Protocols: protocols,
-		Availability: planAvailability{Status: "coming_soon", Purchasable: false, Reason: "Provisioning is not connected."},
+		Availability: planAvailability{Status: "available", Purchasable: true, Reason: "Demo purchase only; live provisioning is not connected."},
 		Pricing:      planPricing{Currency: "XTR", Amount: nil, Draft: true},
 		Entitlements: planEntitlements{
 			TrafficBytes: quotaPtr, TrafficUnlimited: quotaGB == 0,

@@ -75,6 +75,19 @@ func TestPlansRejectsNonGet(t *testing.T) {
 	}
 }
 
+func TestDemoPurchase(t *testing.T) {
+	req := httptest.NewRequest(http.MethodPost, "/api/demo/purchase", strings.NewReader(`{"productFamily":"mtproto","protocol":"MTProto"}`))
+	recorder := httptest.NewRecorder()
+	demoPurchaseHandler(recorder, req)
+	if recorder.Code != http.StatusOK {
+		t.Fatalf("expected 200, got %d: %s", recorder.Code, recorder.Body.String())
+	}
+	var body map[string]any
+	if err := json.Unmarshal(recorder.Body.Bytes(), &body); err != nil || body["demo"] != true {
+		t.Fatalf("invalid demo purchase response: %v", err)
+	}
+}
+
 func TestOpenAPISpecContainsDemoPaths(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	New().ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/openapi.json", nil))

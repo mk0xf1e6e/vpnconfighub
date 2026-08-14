@@ -34,6 +34,7 @@ export interface Plan {
   entitlements: PlanEntitlements;
 }
 export interface PlansResponse { plans: Plan[] }
+export interface DemoPurchaseResponse { demo: true; payment: { demo: true; status: "paid"; provider: "demo"; paymentId: string }; proxy: { demo: true; status: "active"; protocol: string; address: string; port: number; username: string; password: string; note: string } }
 
 export async function getHealth(): Promise<{ status: string }> {
   const response = await fetch(`${API_URL}/health`, {
@@ -65,4 +66,12 @@ export async function getPlans(): Promise<PlansResponse> {
   const body: unknown = await response.json();
   if (!body || typeof body !== "object" || !Array.isArray((body as PlansResponse).plans)) throw new Error("Invalid plans response");
   return body as PlansResponse;
+}
+
+export async function purchaseDemoProxy(selection: { family: string; protocol: string; quota: string | number; speed: string | number; durationDays: number; devices: number }): Promise<DemoPurchaseResponse> {
+  const response = await fetch("/api/demo/purchase", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ productFamily: selection.family, ...selection }) });
+  if (!response.ok) throw new Error(`Demo purchase failed: ${response.status}`);
+  const body: unknown = await response.json();
+  if (!body || typeof body !== "object" || (body as DemoPurchaseResponse).demo !== true) throw new Error("Invalid demo purchase response");
+  return body as DemoPurchaseResponse;
 }

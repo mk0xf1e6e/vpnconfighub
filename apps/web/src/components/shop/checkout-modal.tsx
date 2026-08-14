@@ -1,6 +1,8 @@
 "use client";
 
 import type { ProductSelection } from "@/components/shop/catalog";
+import { purchaseDemoProxy, type DemoPurchaseResponse } from "@/lib/api/client";
+import { useState } from "react";
 
 interface CheckoutModalProps {
   selection: ProductSelection;
@@ -15,6 +17,15 @@ export function CheckoutModal({
   protocol,
   onClose,
 }: CheckoutModalProps) {
+  const [result, setResult] = useState<DemoPurchaseResponse | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const buy = async () => {
+    setLoading(true); setError(false);
+    try { setResult(await purchaseDemoProxy({ family: productName, protocol, quota: selection.quota, speed: selection.speed, durationDays: selection.durationDays, devices: selection.devices })); }
+    catch { setError(true); }
+    finally { setLoading(false); }
+  };
   return (
     <div
       className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 p-0 sm:p-4 backdrop-blur-sm"
@@ -27,7 +38,7 @@ export function CheckoutModal({
         <div className="flex items-center justify-between border-b border-[#2b394a] pb-4">
           <div>
             <h3 className="text-lg font-bold text-[#f5f5f5]">Configuration Summary</h3>
-            <p className="text-xs text-[#7f8c99]">Review the future entitlement</p>
+            <p className="text-xs text-[#7f8c99]">Demo purchase only</p>
           </div>
 
           <button
@@ -39,7 +50,15 @@ export function CheckoutModal({
           </button>
         </div>
 
-        <div className="mt-4 rounded-xl border border-[#2b394a] bg-[#242f3d] p-4 space-y-2">
+        {result ? <div className="mt-4 space-y-2 rounded-xl border border-[#2aabee]/40 bg-[#242f3d] p-4 text-xs">
+          <p className="font-bold text-[#2aabee]">Demo payment complete</p>
+          <p className="text-[#7f8c99]">Payment ID: {result.payment.paymentId}</p>
+          <p className="font-semibold text-[#f5f5f5]">Fake proxy credentials</p>
+          <p className="break-all text-[#7f8c99]">Address: {result.proxy.address}:{result.proxy.port}</p>
+          <p className="break-all text-[#7f8c99]">Username: {result.proxy.username}</p>
+          <p className="break-all text-[#7f8c99]">Password: {result.proxy.password}</p>
+          <p className="pt-2 text-[#eac035]">{result.proxy.note}</p>
+        </div> : <div className="mt-4 rounded-xl border border-[#2b394a] bg-[#242f3d] p-4 space-y-2">
           <div className="flex items-center justify-between">
             <span className="font-bold text-[#f5f5f5]">{productName}</span>
             <span className="rounded bg-[#2aabee]/10 px-2 py-0.5 text-xs font-semibold text-[#2aabee]">
@@ -54,7 +73,7 @@ export function CheckoutModal({
           <div className="mt-2 text-xs text-[#7f8c99]">
             {selection.quota === "unlimited" ? "Unlimited traffic" : `${selection.quota} GB traffic`} · {selection.speed === "uncapped" ? "Uncapped speed" : `${selection.speed} Mbps cap`}
           </div>
-        </div>
+        </div>}
 
         <div className="mt-4 space-y-2 rounded-xl bg-[#1f2936] p-4 text-xs">
           <div className="flex justify-between text-[#7f8c99]"><span>Price</span><span className="text-[#eac035]">Unavailable</span></div>
@@ -62,17 +81,19 @@ export function CheckoutModal({
         </div>
 
         <div className="mt-3 rounded-xl border border-[#eac035]/30 bg-[#eac035]/10 p-3 text-xs text-[#eac035]">
-          Payment and configuration generation are not connected yet.
+          Demo mode: fake payment and fake credentials. No real charge or live proxy.
         </div>
 
         <div className="mt-6 space-y-2">
           <button
             type="button"
-            disabled
-            className="w-full rounded-xl bg-[#2aabee]/50 py-3.5 text-xs font-bold text-white/50 cursor-not-allowed"
+            disabled={loading || Boolean(result)}
+            onClick={buy}
+            className="w-full rounded-xl bg-[#2aabee] py-3.5 text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
           >
-            Provisioning Unavailable
+            {loading ? "Generating demo proxy..." : result ? "Demo proxy generated" : "Pay with demo payment"}
           </button>
+          {error ? <p className="text-center text-xs text-[#eac035]">Demo purchase failed. Try again.</p> : null}
 
           <button
             type="button"

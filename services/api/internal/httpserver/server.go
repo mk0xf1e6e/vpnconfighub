@@ -27,6 +27,7 @@ func NewWithStore(database *store.Store) http.Handler {
 	mux.HandleFunc("/api/demo/usage", demoUsageHandler)
 	mux.HandleFunc("/api/demo/catalog", demoCatalogHandler)
 	mux.HandleFunc("/api/plans", plansHandler)
+	mux.HandleFunc("/api/demo/purchase", demoPurchaseHandler)
 
 	return mux
 }
