@@ -196,6 +196,31 @@ ssh deploy@20.240.40.186 'docker-compose -f /opt/vpn-config-hub/deploy/compose.f
 
 The VPS revision must match the GitHub `main` commit. A green workflow alone is insufficient; verify the public URLs.
 
+## Local Deployment Scripts
+
+Update the VPS manually from the current GitHub `main` branch:
+
+```bash
+./scripts/deploy-vps.sh
+```
+
+The script fetches and resets the VPS checkout, validates Compose, rebuilds/restarts only `api` and `frontend`, waits for both healthchecks, checks Nginx, and verifies both public URLs. It exits non-zero on failure.
+
+Show deployment time, commit, container health, Nginx, ports, local health, and public health:
+
+```bash
+./scripts/server-status.sh
+```
+
+Optional overrides:
+
+```bash
+VPS_HOST=20.240.40.186 VPS_USER=root ./scripts/deploy-vps.sh
+VPS_HOST=20.240.40.186 VPS_USER=root ./scripts/server-status.sh
+```
+
+The status output's `Commit time` is the Git commit timestamp. Container `started` is the latest process start time. `Deployment successful.` means all local and public checks passed.
+
 ## Rollback
 
 ```bash
