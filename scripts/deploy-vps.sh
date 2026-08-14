@@ -25,7 +25,9 @@ cd "$deploy_path"
 docker-compose -f "$compose_file" config >/dev/null
 docker-compose -f "$compose_file" build api frontend
 old_frontend=$(docker-compose -f "$compose_file" ps -q frontend || true)
+old_api=$(docker-compose -f "$compose_file" ps -q api || true)
 if [ -n "$old_frontend" ]; then docker rm -f "$old_frontend"; fi
+if [ -n "$old_api" ]; then docker rm -f "$old_api"; fi
 docker-compose -f "$compose_file" up -d api
 docker-compose -f "$compose_file" up -d --no-deps frontend
 deadline=$(( $(date +%s) + health_timeout ))
