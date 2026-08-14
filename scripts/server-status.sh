@@ -41,13 +41,25 @@ ssh -o BatchMode=yes -o ConnectTimeout=10 "$VPS_USER@$VPS_HOST" "set -Eeuo pipef
 
 echo
 echo "=== PUBLIC HEALTH ==="
-if curl -fsSI --max-time 15 https://vch.milad-karami.ir/ >/dev/null; then
+frontend_headers="$(mktemp)"
+api_headers="$(mktemp)"
+trap 'rm -f "$frontend_headers" "$api_headers"' EXIT
+
+curl -sS --max-time 15 -D "$frontend_headers" -o /dev/null https://vch.milad-karami.ir/ || true
+if grep -q '^HTTP/.* 2' "$frontend_headers"; then
   echo "Frontend: OK (https://vch.milad-karami.ir)"
+elif grep -qi '^cf-mitigated: challenge' "$frontend_headers"; then
+  echo "Frontend: CLOUDFLARE CHALLENGE (origin health passed)"
 else
   echo "Frontend: FAIL"
 fi
-if api_response="$(curl -fsS --max-time 15 https://vch-api.milad-karami.ir/health 2>/dev/null)"; then
+curl -sS --max-time 15 -D "$api_headers" -o /tmp/vch-api-public-health https://vch-api.milad-karami.ir/health || true
+if grep -q '^HTTP/.* 2' "$api_headers"; then
+  api_response="$(cat /tmp/vch-api-public-health)"
   echo "API: OK ($api_response)"
+elif grep -qi '^cf-mitigated: challenge' "$api_headers"; then
+  echo "API: CLOUDFLARE CHALLENGE (origin health passed)"
 else
   echo "API: FAIL"
 fi
+rm -f /tmp/vch-api-public-health

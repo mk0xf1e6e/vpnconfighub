@@ -58,6 +58,8 @@
 - [x] Typed frontend `getPlans()` client
 - [x] Store availability loaded from plans API
 - [x] Local API plans/Swagger smoke checks
+- [x] Frontend renders API entitlement limits
+- [x] Unavailable plan review action disabled
 - [ ] Persist plans and prices in PostgreSQL
 - [ ] Add admin plan management
 - [ ] Add real payment/provisioning enforcement

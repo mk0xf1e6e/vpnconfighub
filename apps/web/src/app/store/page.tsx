@@ -62,6 +62,8 @@ export default function StorePage() {
   const [selectedForCheckout, setSelectedForCheckout] = useState(false);
   const cardRefs = useRef<Partial<Record<ProductFamily, HTMLDivElement | null>>>({});
   const family = useMemo(() => products.find((item) => item.id === selection.family) ?? products[0], [products, selection.family]);
+  const familyPlans = plans.filter((plan) => plan.productFamily === family.id);
+  const selectedPlan = familyPlans[0];
 
   useEffect(() => {
     getPlans().then((response) => {
@@ -101,7 +103,7 @@ export default function StorePage() {
         <p>{selection.durationDays} days · {selection.devices} device{selection.devices === 1 ? "" : "s"}</p>
         <p className="mt-2 text-[#eac035]">Price unavailable until pricing is approved.</p>
       </div>
-      <button type="button" onClick={() => setSelectedForCheckout(true)} className="w-full rounded-xl bg-[#2aabee] py-3 text-xs font-bold text-white transition hover:bg-[#229ed9]">
+      <button type="button" disabled={!selectedPlan?.availability.purchasable} onClick={() => setSelectedForCheckout(true)} className="w-full rounded-xl bg-[#2aabee] py-3 text-xs font-bold text-white transition hover:bg-[#229ed9] disabled:cursor-not-allowed disabled:opacity-50">
         Review configuration
       </button>
     </div>
@@ -125,7 +127,14 @@ export default function StorePage() {
           {catalogState === "ready" && products.map((product) => (
             <PlanCard key={product.id} product={product} selected={product.id === expandedFamily} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
               {product.id === expandedFamily ? entitlementOptions : null}
-              {plans.filter((plan) => plan.productFamily === product.id).map((plan) => <p key={plan.id} className="mt-2 text-[11px] text-[#7f8c99]">{plan.name}: {plan.availability.purchasable ? "Available" : plan.availability.reason ?? plan.availability.status}</p>)}
+              {plans.filter((plan) => plan.productFamily === product.id).map((plan) => (
+                <div key={plan.id} className="mt-3 rounded-xl border border-[#2b394a] bg-[#1f2936] p-3 text-[11px] text-[#7f8c99]">
+                  <p className="font-bold text-[#f5f5f5]">{plan.name}</p>
+                  <p className="mt-1">{plan.availability.purchasable ? "Available" : plan.availability.reason ?? plan.availability.status}</p>
+                  <p>{plan.entitlements.trafficUnlimited ? "Unlimited traffic" : `${Math.round((plan.entitlements.trafficBytes ?? 0) / 1073741824)} GB traffic`} · {plan.entitlements.speedUncapped ? "Uncapped speed" : `${plan.entitlements.speedMbps} Mbps cap`}</p>
+                  <p>{plan.entitlements.maxDevices ?? "Unlimited"} devices · {plan.entitlements.activeUsers ?? "Unlimited"} active users · {plan.entitlements.connectionsUnlimited ? "Unlimited" : plan.entitlements.maxConnections ?? "Unlimited"} connections · {plan.entitlements.durationDays} days</p>
+                </div>
+              ))}
             </PlanCard>
           ))}
         </div>
