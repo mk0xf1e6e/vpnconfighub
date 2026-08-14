@@ -70,7 +70,13 @@ for pair in "Frontend:$frontend_headers" "API:$api_headers"; do
     echo "$name public check failed:"; cat "$file"; exit 1
   fi
 done
-api_response="$(curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/health)"
-printf 'API response: %s\n' "$api_response"
-curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/plans >/dev/null || echo "API plans public body blocked by Cloudflare; verify from a browser after challenge clearance."
+api_body="$(mktemp)"
+curl -sS --retry 3 --retry-delay 2 -D "$api_headers" -o "$api_body" https://vch-api.milad-karami.ir/health || true
+if grep -q 'cf-mitigated: challenge' "$api_headers"; then
+  echo "API public body blocked by Cloudflare Managed Challenge; origin health passed."
+else
+  api_response="$(cat "$api_body")"
+  printf 'API response: %s\n' "$api_response"
+  curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/plans >/dev/null
+fi
 echo "Deployment successful."
