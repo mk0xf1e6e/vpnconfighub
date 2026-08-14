@@ -24,16 +24,23 @@ git -C "$deploy_path" reset --hard origin/main
 cd "$deploy_path"
 docker-compose -f "$compose_file" config >/dev/null
 docker-compose -f "$compose_file" build api frontend
-docker-compose -f "$compose_file" up -d api frontend
+old_frontend=$(docker-compose -f "$compose_file" ps -q frontend || true)
+if [ -n "$old_frontend" ]; then docker rm -f "$old_frontend"; fi
+docker-compose -f "$compose_file" up -d api
+docker-compose -f "$compose_file" up -d --no-deps frontend
 deadline=$(( $(date +%s) + health_timeout ))
 until [ "$(date +%s)" -ge "$deadline" ]; do
-  api=$(docker inspect -f '{{.State.Health.Status}}' deploy_api_1 2>/dev/null || true)
-  frontend=$(docker inspect -f '{{.State.Health.Status}}' deploy_frontend_1 2>/dev/null || true)
+  api_id=$(docker-compose -f "$compose_file" ps -q api || true)
+  frontend_id=$(docker-compose -f "$compose_file" ps -q frontend || true)
+  api=$(docker inspect -f '{{.State.Health.Status}}' "$api_id" 2>/dev/null || true)
+  frontend=$(docker inspect -f '{{.State.Health.Status}}' "$frontend_id" 2>/dev/null || true)
   if [ "$api" = healthy ] && [ "$frontend" = healthy ]; then break; fi
   sleep 5
 done
-api=$(docker inspect -f '{{.State.Health.Status}}' deploy_api_1)
-frontend=$(docker inspect -f '{{.State.Health.Status}}' deploy_frontend_1)
+api_id=$(docker-compose -f "$compose_file" ps -q api)
+frontend_id=$(docker-compose -f "$compose_file" ps -q frontend)
+api=$(docker inspect -f '{{.State.Health.Status}}' "$api_id")
+frontend=$(docker inspect -f '{{.State.Health.Status}}' "$frontend_id")
 [ "$api" = healthy ]
 [ "$frontend" = healthy ]
 curl -fsS http://127.0.0.1:4000/health >/dev/null
