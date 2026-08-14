@@ -31,6 +31,27 @@ func TestDemoEndpointsRejectNonGet(t *testing.T) {
 	}
 }
 
+func TestOpenAPIRoutes(t *testing.T) {
+	for _, path := range []string{"/openapi.json", "/swagger"} {
+		recorder := httptest.NewRecorder()
+		New().ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, path, nil))
+		if recorder.Code != http.StatusOK {
+			t.Fatalf("%s: expected 200, got %d", path, recorder.Code)
+		}
+	}
+}
+
+func TestOpenAPISpecContainsDemoPaths(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	New().ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/openapi.json", nil))
+	body := recorder.Body.String()
+	for _, path := range []string{"/health", "/api/demo/dashboard", "/api/demo/usage", "/api/demo/catalog"} {
+		if !strings.Contains(body, path) {
+			t.Fatalf("OpenAPI spec missing %s", path)
+		}
+	}
+}
+
 func TestTelegramAuthHandlerRequiresBotToken(t *testing.T) {
 	t.Setenv("TELEGRAM_BOT_TOKEN", "")
 

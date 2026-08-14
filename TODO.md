@@ -43,6 +43,9 @@
 - [x] Demo API tests and frontend integration verified
 - [x] Demo dashboard deployed to VPS
 - [x] Demo catalog deployed to VPS
+- [x] Local Swagger/OpenAPI routes
+- [x] Local API smoke checks
+- [ ] Real authenticated usage/catalog backend
 
 ## Frontend Deployment
 
