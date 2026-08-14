@@ -8,18 +8,20 @@ interface PlanCardProps {
   selected: boolean;
   onSelect: () => void;
   children?: ReactNode;
+  cardRef?: (node: HTMLDivElement | null) => void;
 }
 
-export function PlanCard({ product, selected, onSelect, children }: PlanCardProps) {
+export function PlanCard({ product, selected, onSelect, children, cardRef }: PlanCardProps) {
   return (
     <div
+      ref={cardRef}
       className={`w-full rounded-2xl border p-4 text-left shadow-lg transition ${
         selected
-          ? "border-[#2aabee] bg-[#242f3d] ring-1 ring-[#2aabee]"
+          ? "border-[#2aabee] bg-[#242f3d]"
           : "border-[#2b394a] bg-[#242f3d] hover:border-[#5288c1]"
       }`}
     >
-      <button type="button" onClick={onSelect} className="w-full text-left focus:outline-none focus:ring-2 focus:ring-[#2aabee]">
+      <button type="button" onClick={onSelect} className="w-full text-left focus:outline-none">
         <div className="flex items-start justify-between gap-3">
         <div>
           <h3 className="text-base font-bold text-[#f5f5f5]">{product.name}</h3>

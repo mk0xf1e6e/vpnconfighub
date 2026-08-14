@@ -221,6 +221,18 @@ VPS_HOST=20.240.40.186 VPS_USER=root ./scripts/server-status.sh
 
 The status output's `Commit time` is the Git commit timestamp. Container `started` is the latest process start time. `Deployment successful.` means all local and public checks passed.
 
+Show recent Nginx frontend/API/error requests:
+
+```bash
+./scripts/request-status.sh
+```
+
+Follow new Nginx access/error lines live:
+
+```bash
+./scripts/request-status.sh follow
+```
+
 ## Rollback
 
 ```bash

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { CheckoutModal } from "@/components/shop/checkout-modal";
 import {
   createDefaultSelection,
@@ -56,11 +56,15 @@ function OptionGroup<T extends string | number>({
 export default function StorePage() {
   const [selection, setSelection] = useState<ProductSelection>(createDefaultSelection);
   const [selectedForCheckout, setSelectedForCheckout] = useState(false);
+  const cardRefs = useRef<Partial<Record<ProductFamily, HTMLDivElement | null>>>({});
   const family = useMemo(() => getFamily(selection.family), [selection.family]);
 
   const changeFamily = (familyId: ProductFamily) => {
     const nextFamily = getFamily(familyId);
     setSelection((current) => ({ ...current, family: familyId, protocol: nextFamily.protocols[0] }));
+    window.requestAnimationFrame(() => {
+      cardRefs.current[familyId]?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
   };
 
   const update = <K extends keyof ProductSelection>(key: K, value: ProductSelection[K]) => {
@@ -102,7 +106,7 @@ export default function StorePage() {
         <h2 className="mb-3 text-sm font-bold text-[#f5f5f5]">1. Choose a service</h2>
         <div className="space-y-3">
           {PRODUCT_FAMILIES.map((product) => (
-            <PlanCard key={product.id} product={product} selected={product.id === selection.family} onSelect={() => changeFamily(product.id)}>
+            <PlanCard key={product.id} product={product} selected={product.id === selection.family} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
               {entitlementOptions}
             </PlanCard>
           ))}
