@@ -12,12 +12,12 @@ export function TelegramShell({ children }: TelegramShellProps) {
     <div className="min-h-[100dvh] w-full bg-[#0e1621] text-[#f5f5f5] antialiased">
       <header
         aria-hidden="true"
-        className="fixed inset-x-0 top-0 z-40 h-[env(safe-area-inset-top)] min-h-3 border-b border-[#2b394a] bg-[#17212b]/95 backdrop-blur"
+        className="fixed inset-x-0 top-0 z-40 h-12 border-b border-[#2b394a] bg-[#17212b]/95 pt-[env(safe-area-inset-top)] backdrop-blur"
       />
       <main
         className="min-h-[100dvh] scroll-pb-24 pb-24"
         style={{
-          paddingTop: "max(0.75rem, var(--tg-content-safe-area-inset-top, env(safe-area-inset-top, 0px)))",
+           paddingTop: "max(3rem, calc(3rem + var(--tg-content-safe-area-inset-top, env(safe-area-inset-top, 0px))))",
           paddingLeft: "var(--tg-content-safe-area-inset-left, 0px)",
           paddingRight: "var(--tg-content-safe-area-inset-right, 0px)",
         }}

@@ -28,6 +28,19 @@
 - [ ] Payment integration
 - [ ] Backend provisioning and usage enforcement
 
+## Demo Dashboard/API
+
+- [x] Deterministic `/api/demo/dashboard` endpoint
+- [x] Deterministic `/api/demo/usage` endpoint
+- [x] Deterministic `/api/demo/catalog` endpoint
+- [x] Home dashboard fetches demo usage/subscription data
+- [x] Usage graph and daily usage rows
+- [x] Store fetches catalog availability/protocols/pricing
+- [x] Demo data labels and honest empty states
+- [x] Product cards expand/collapse with scoped entitlements
+- [x] Fixed empty 48px safe-area top bar
+- [ ] Replace demo endpoints with authenticated backend endpoints
+
 ## Frontend Deployment
 
 - [x] Standalone Next.js output
@@ -55,6 +68,16 @@
 Current milestone: frontend container and CI are deployment-ready. Nginx, Cloudflare, VPS, admin, and backend deployment remain deferred until those services exist.
 
 ## Deferred Backend
+
+## Demo API And Dashboard
+
+- [x] Deterministic labeled demo dashboard, usage, and catalog endpoints
+- [x] Typed frontend API client with loading/error handling
+- [x] Home dashboard subscription, quota data, graph, and daily usage
+- [x] Store catalog loading and reversible scoped accordion cards
+- [x] Empty configuration and node states remain honest
+- [x] Deployment build-before-replace flow and demo endpoint checks
+- [ ] Replace demo data with authenticated account, usage, pricing, and provisioning APIs
 
 - [ ] Backend application business logic
 - [ ] Telegram `initData` verification

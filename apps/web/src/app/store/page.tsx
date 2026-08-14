@@ -1,12 +1,11 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { CheckoutModal } from "@/components/shop/checkout-modal";
 import {
   createDefaultSelection,
   DEVICE_OPTIONS,
   DURATION_OPTIONS,
-  getFamily,
   PRODUCT_FAMILIES,
   QUOTA_OPTIONS,
   SPEED_OPTIONS,
@@ -18,6 +17,7 @@ import {
   type SpeedOption,
 } from "@/components/shop/catalog";
 import { PlanCard } from "@/components/shop/plan-card";
+import { getDemoCatalog } from "@/lib/api/client";
 
 function OptionGroup<T extends string | number>({
   label,
@@ -55,12 +55,25 @@ function OptionGroup<T extends string | number>({
 
 export default function StorePage() {
   const [selection, setSelection] = useState<ProductSelection>(createDefaultSelection);
+  const [products, setProducts] = useState(PRODUCT_FAMILIES);
+  const [expandedFamily, setExpandedFamily] = useState<ProductFamily | null>(selection.family);
+  const [catalogState, setCatalogState] = useState<"loading" | "ready" | "error">("loading");
   const [selectedForCheckout, setSelectedForCheckout] = useState(false);
   const cardRefs = useRef<Partial<Record<ProductFamily, HTMLDivElement | null>>>({});
-  const family = useMemo(() => getFamily(selection.family), [selection.family]);
+  const family = useMemo(() => products.find((item) => item.id === selection.family) ?? products[0], [products, selection.family]);
+
+  useEffect(() => {
+    getDemoCatalog().then((catalog) => {
+      const next = catalog.items.filter((item) => ["mtproto", "socks5", "http", "v2ray"].includes(item.id)).map((item) => ({ ...item, id: item.id as ProductFamily }));
+      if (next.length) { setProducts(next); setSelection((current) => ({ ...current, family: next[0].id, protocol: next[0].protocols[0] ?? "" })); }
+      setCatalogState("ready");
+    }).catch(() => setCatalogState("error"));
+  }, []);
 
   const changeFamily = (familyId: ProductFamily) => {
-    const nextFamily = getFamily(familyId);
+    if (expandedFamily === familyId) { setExpandedFamily(null); return; }
+    const nextFamily = products.find((item) => item.id === familyId) ?? products[0];
+    setExpandedFamily(familyId);
     setSelection((current) => ({ ...current, family: familyId, protocol: nextFamily.protocols[0] }));
     window.requestAnimationFrame(() => {
       cardRefs.current[familyId]?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -98,16 +111,18 @@ export default function StorePage() {
         <h1 className="text-xl font-bold text-[#f5f5f5]">Build Your Connection</h1>
         <p className="text-xs text-[#7f8c99]">Choose the proxy or config you want to create.</p>
         <p className="mt-3 rounded-xl border border-[#eac035]/30 bg-[#eac035]/10 px-3 py-2 text-xs text-[#eac035]">
-          Frontend catalog only. Prices, payments, and provisioning are not connected.
+          Demo catalog · Draft pricing. Payments and provisioning are not connected.
         </p>
       </header>
 
       <section>
         <h2 className="mb-3 text-sm font-bold text-[#f5f5f5]">1. Choose a service</h2>
         <div className="space-y-3">
-          {PRODUCT_FAMILIES.map((product) => (
-            <PlanCard key={product.id} product={product} selected={product.id === selection.family} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
-              {entitlementOptions}
+          {catalogState === "loading" ? <p className="text-xs text-[#7f8c99]">Loading demo catalog...</p> : null}
+          {catalogState === "error" ? <p className="text-xs text-[#eac035]">Demo catalog is currently unavailable.</p> : null}
+          {catalogState === "ready" && products.map((product) => (
+            <PlanCard key={product.id} product={product} selected={product.id === expandedFamily} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
+              {product.id === expandedFamily ? entitlementOptions : null}
             </PlanCard>
           ))}
         </div>

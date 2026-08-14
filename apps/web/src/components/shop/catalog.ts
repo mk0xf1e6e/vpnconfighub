@@ -10,6 +10,8 @@ export interface ProductFamilyDefinition {
   description: string;
   protocols: string[];
   availability: "planned" | "available";
+  draftPricing?: boolean;
+  prices?: Record<string, number | null>;
 }
 
 export interface ProductSelection {

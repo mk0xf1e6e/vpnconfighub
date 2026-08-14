@@ -44,6 +44,8 @@ frontend=$(docker inspect -f '{{.State.Health.Status}}' "$frontend_id")
 [ "$api" = healthy ]
 [ "$frontend" = healthy ]
 curl -fsS http://127.0.0.1:4000/health >/dev/null
+curl -fsS http://127.0.0.1:4000/api/demo/dashboard >/dev/null
+curl -fsS http://127.0.0.1:4000/api/demo/catalog >/dev/null
 curl -fsS http://127.0.0.1:3000/ >/dev/null
 nginx -t
 systemctl is-active --quiet nginx
@@ -56,4 +58,6 @@ echo "Public checks"
 curl -fsS --retry 3 --retry-delay 2 https://vch.milad-karami.ir/ >/dev/null
 api_response="$(curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/health)"
 printf 'API response: %s\n' "$api_response"
+curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/demo/dashboard >/dev/null
+curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/demo/catalog >/dev/null
 echo "Deployment successful."
