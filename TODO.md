@@ -47,6 +47,21 @@
 - [x] Local API smoke checks
 - [ ] Real authenticated usage/catalog backend
 
+## Generic Plans API
+
+- [x] Generic Go plan/entitlement models
+- [x] Nullable limits with explicit unlimited flags
+- [x] Availability status and purchasable flag
+- [x] `GET /api/plans`
+- [x] Swagger/OpenAPI `/api/plans` documentation
+- [x] API schema/method/unlimited tests
+- [x] Typed frontend `getPlans()` client
+- [x] Store availability loaded from plans API
+- [x] Local API plans/Swagger smoke checks
+- [ ] Persist plans and prices in PostgreSQL
+- [ ] Add admin plan management
+- [ ] Add real payment/provisioning enforcement
+
 ## Frontend Deployment
 
 - [x] Standalone Next.js output

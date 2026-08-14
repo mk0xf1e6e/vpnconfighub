@@ -41,6 +41,40 @@ func TestOpenAPIRoutes(t *testing.T) {
 	}
 }
 
+func TestPlansEndpoint(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	New().ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/api/plans", nil))
+	if recorder.Code != http.StatusOK || recorder.Header().Get("Cache-Control") != "no-store" {
+		t.Fatalf("expected cache-free 200, got %d %q", recorder.Code, recorder.Header().Get("Cache-Control"))
+	}
+	var body struct {
+		Plans []struct {
+			ID           string `json:"id"`
+			Entitlements struct {
+				TrafficBytes     *int64 `json:"trafficBytes"`
+				TrafficUnlimited bool   `json:"trafficUnlimited"`
+				SpeedMbps        *int   `json:"speedMbps"`
+				SpeedUncapped    bool   `json:"speedUncapped"`
+			} `json:"entitlements"`
+		} `json:"plans"`
+	}
+	if err := json.Unmarshal(recorder.Body.Bytes(), &body); err != nil || len(body.Plans) != 4 {
+		t.Fatalf("unexpected plans response: %v", err)
+	}
+	last := body.Plans[len(body.Plans)-1]
+	if last.Entitlements.TrafficBytes != nil || !last.Entitlements.TrafficUnlimited || last.Entitlements.SpeedMbps != nil || !last.Entitlements.SpeedUncapped {
+		t.Fatalf("unlimited plan flags invalid: %+v", last.Entitlements)
+	}
+}
+
+func TestPlansRejectsNonGet(t *testing.T) {
+	recorder := httptest.NewRecorder()
+	New().ServeHTTP(recorder, httptest.NewRequest(http.MethodPost, "/api/plans", nil))
+	if recorder.Code != http.StatusMethodNotAllowed {
+		t.Fatalf("expected 405, got %d", recorder.Code)
+	}
+}
+
 func TestOpenAPISpecContainsDemoPaths(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	New().ServeHTTP(recorder, httptest.NewRequest(http.MethodGet, "/openapi.json", nil))
@@ -49,6 +83,9 @@ func TestOpenAPISpecContainsDemoPaths(t *testing.T) {
 		if !strings.Contains(body, path) {
 			t.Fatalf("OpenAPI spec missing %s", path)
 		}
+	}
+	if !strings.Contains(body, "/api/plans") {
+		t.Fatal("OpenAPI spec missing /api/plans")
 	}
 }
 

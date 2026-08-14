@@ -17,7 +17,7 @@ import {
   type SpeedOption,
 } from "@/components/shop/catalog";
 import { PlanCard } from "@/components/shop/plan-card";
-import { getDemoCatalog } from "@/lib/api/client";
+import { getPlans, type Plan } from "@/lib/api/client";
 
 function OptionGroup<T extends string | number>({
   label,
@@ -56,6 +56,7 @@ function OptionGroup<T extends string | number>({
 export default function StorePage() {
   const [selection, setSelection] = useState<ProductSelection>(createDefaultSelection);
   const [products, setProducts] = useState(PRODUCT_FAMILIES);
+  const [plans, setPlans] = useState<Plan[]>([]);
   const [expandedFamily, setExpandedFamily] = useState<ProductFamily | null>(selection.family);
   const [catalogState, setCatalogState] = useState<"loading" | "ready" | "error">("loading");
   const [selectedForCheckout, setSelectedForCheckout] = useState(false);
@@ -63,9 +64,10 @@ export default function StorePage() {
   const family = useMemo(() => products.find((item) => item.id === selection.family) ?? products[0], [products, selection.family]);
 
   useEffect(() => {
-    getDemoCatalog().then((catalog) => {
-      const next = catalog.items.filter((item) => ["mtproto", "socks5", "http", "v2ray"].includes(item.id)).map((item) => ({ ...item, id: item.id as ProductFamily }));
-      if (next.length) { setProducts(next); setSelection((current) => ({ ...current, family: next[0].id, protocol: next[0].protocols[0] ?? "" })); }
+    getPlans().then((response) => {
+      setPlans(response.plans);
+      const next = PRODUCT_FAMILIES.map((family) => ({ ...family, availability: response.plans.some((plan) => plan.productFamily === family.id && plan.availability.purchasable) ? "available" as const : "planned" as const }));
+      setProducts(next);
       setCatalogState("ready");
     }).catch(() => setCatalogState("error"));
   }, []);
@@ -123,6 +125,7 @@ export default function StorePage() {
           {catalogState === "ready" && products.map((product) => (
             <PlanCard key={product.id} product={product} selected={product.id === expandedFamily} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
               {product.id === expandedFamily ? entitlementOptions : null}
+              {plans.filter((plan) => plan.productFamily === product.id).map((plan) => <p key={plan.id} className="mt-2 text-[11px] text-[#7f8c99]">{plan.name}: {plan.availability.purchasable ? "Available" : plan.availability.reason ?? plan.availability.status}</p>)}
             </PlanCard>
           ))}
         </div>

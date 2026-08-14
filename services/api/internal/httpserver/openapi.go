@@ -38,6 +38,13 @@ const openAPISpec = `{
         "responses": {"200": {"description": "Demo catalog", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/DemoCatalog"}}}}}
       }
     }
+    ,"/api/plans": {
+      "get": {
+        "summary": "Available plans",
+        "description": "Plan capabilities and availability. Enforcement is performed by the backend when implemented.",
+        "responses": {"200": {"description": "Available plans", "content": {"application/json": {"schema": {"$ref": "#/components/schemas/PlansResponse"}}}}}
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -46,6 +53,11 @@ const openAPISpec = `{
       "DemoUsage": {"type": "object", "required": ["demo", "totalBytes", "daily"], "properties": {"demo": {"type": "boolean", "example": true}, "totalBytes": {"type": "integer", "format": "int64"}, "daily": {"type": "array", "items": {"$ref": "#/components/schemas/DailyUsage"}}}},
       "DemoDashboard": {"type": "object", "required": ["demo", "subscription", "usage", "configuration", "nodes"], "properties": {"demo": {"type": "boolean"}, "subscription": {"type": "object"}, "usage": {"$ref": "#/components/schemas/DemoUsage"}, "configuration": {}, "nodes": {"type": "array"}}},
       "DemoCatalog": {"type": "object", "required": ["demo", "items"], "properties": {"demo": {"type": "boolean"}, "items": {"type": "array", "items": {"type": "object"}}}}
+      ,"PlansResponse": {"type": "object", "required": ["plans"], "properties": {"plans": {"type": "array", "items": {"$ref": "#/components/schemas/Plan"}}}},
+      "Plan": {"type": "object", "required": ["id", "productFamily", "name", "availability", "pricing", "entitlements"], "properties": {"id": {"type": "string"}, "productFamily": {"type": "string"}, "name": {"type": "string"}, "description": {"type": "string"}, "protocols": {"type": "array", "items": {"type": "string"}}, "availability": {"$ref": "#/components/schemas/Availability"}, "pricing": {"$ref": "#/components/schemas/Pricing"}, "entitlements": {"$ref": "#/components/schemas/Entitlements"}}},
+      "Availability": {"type": "object", "properties": {"status": {"type": "string", "enum": ["draft", "available", "sold_out", "disabled", "coming_soon"]}, "purchasable": {"type": "boolean"}, "reason": {"type": "string"}}},
+      "Pricing": {"type": "object", "properties": {"currency": {"type": "string"}, "amount": {"type": ["integer", "null"]}, "draft": {"type": "boolean"}}},
+      "Entitlements": {"type": "object", "properties": {"trafficBytes": {"type": ["integer", "null"]}, "trafficUnlimited": {"type": "boolean"}, "speedMbps": {"type": ["integer", "null"]}, "speedUncapped": {"type": "boolean"}, "activeUsers": {"type": ["integer", "null"]}, "maxDevices": {"type": ["integer", "null"]}, "maxConnections": {"type": ["integer", "null"]}, "connectionsUnlimited": {"type": "boolean"}, "durationDays": {"type": "integer"}, "limits": {"type": "object"}}}
     }
   }
 }`
