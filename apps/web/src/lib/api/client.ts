@@ -60,7 +60,7 @@ export const getDemoUsage = () => getDemo<DemoUsage>("/api/demo/usage");
 export const getDemoCatalog = () => getDemo<DemoCatalog>("/api/demo/catalog");
 
 export async function getPlans(): Promise<PlansResponse> {
-  const response = await fetch(`${API_URL}/api/plans`, { cache: "no-store" });
+  const response = await fetch("/api/plans", { cache: "no-store" });
   if (!response.ok) throw new Error(`Plans request failed: ${response.status}`);
   const body: unknown = await response.json();
   if (!body || typeof body !== "object" || !Array.isArray((body as PlansResponse).plans)) throw new Error("Invalid plans response");
