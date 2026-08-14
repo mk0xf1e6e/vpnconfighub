@@ -13,6 +13,21 @@
 - [ ] Complete responsive/mobile audit
 - [ ] Add frontend component tests
 
+## Product Catalog And Builder
+
+- [x] Separate MTProto, SOCKS5, HTTP/HTTPS, and V2Ray/Xray families
+- [x] Shared 2/5/10/25/50/100 GB and Unlimited quota ladder
+- [x] Selectable 10/25/50/100/250 Mbps and Uncapped speed
+- [x] Selectable 1/2/3/5/10 device limits
+- [x] Selectable 7/30/90/365 day durations
+- [x] V2Ray/Xray protocol choices
+- [x] Frontend entitlement builder
+- [x] Honest unavailable pricing/provisioning states
+- [x] Reusable usage empty state
+- [ ] Approved commercial price table
+- [ ] Payment integration
+- [ ] Backend provisioning and usage enforcement
+
 ## Frontend Deployment
 
 - [x] Standalone Next.js output
