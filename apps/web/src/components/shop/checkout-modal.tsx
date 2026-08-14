@@ -28,11 +28,11 @@ export function CheckoutModal({
   };
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 p-0 sm:p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[60] flex items-end justify-center overflow-y-auto bg-black/75 p-3 pb-20 backdrop-blur-sm sm:items-center sm:p-4"
       onClick={onClose}
     >
       <div
-        className="w-full max-w-md rounded-t-3xl sm:rounded-2xl border border-[#2b394a] bg-[#17212b] p-6 text-[#f5f5f5] shadow-2xl transition-all"
+        className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-3xl border border-[#2b394a] bg-[#17212b] p-6 text-[#f5f5f5] shadow-2xl transition-all sm:max-h-[calc(100dvh-2rem)]"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between border-b border-[#2b394a] pb-4">
