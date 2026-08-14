@@ -73,5 +73,14 @@ func newPlan(id, family, name, description string, protocols []string, quotaGB, 
 }
 
 func plansHandler(w http.ResponseWriter, r *http.Request) {
+	setCORSHeaders(w, r)
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+	if r.Method != http.MethodGet {
+		writeJSONError(w, http.StatusMethodNotAllowed, "method not allowed")
+		return
+	}
 	writeJSON(w, r, http.StatusOK, map[string]any{"plans": plansFixture})
 }

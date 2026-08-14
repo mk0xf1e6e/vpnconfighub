@@ -122,8 +122,8 @@ export default function StorePage() {
       <section>
         <h2 className="mb-3 text-sm font-bold text-[#f5f5f5]">1. Choose a service</h2>
         <div className="space-y-3">
-          {catalogState === "loading" ? <p className="text-xs text-[#7f8c99]">Loading demo catalog...</p> : null}
-          {catalogState === "error" ? <p className="text-xs text-[#eac035]">Demo catalog is currently unavailable.</p> : null}
+          {catalogState === "loading" ? <p className="text-xs text-[#7f8c99]">Loading plans...</p> : null}
+          {catalogState === "error" ? <p className="text-xs text-[#eac035]">Plans are currently unavailable.</p> : null}
           {catalogState === "ready" && products.map((product) => (
             <PlanCard key={product.id} product={product} selected={product.id === expandedFamily} onSelect={() => changeFamily(product.id)} cardRef={(node) => { cardRefs.current[product.id] = node; }}>
               {product.id === expandedFamily ? entitlementOptions : null}

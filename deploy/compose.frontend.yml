@@ -9,6 +9,7 @@ services:
     environment:
       API_PORT: 4000
       NODE_ENV: production
+      WEB_ORIGIN: ${WEB_ORIGIN:-https://vch.milad-karami.ir}
     networks:
       - vpnhub
     healthcheck:
@@ -23,7 +24,7 @@ services:
       dockerfile: apps/web/Dockerfile
       args:
         NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-}
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://vch-api.milad-karami.ir}
         NEXT_PUBLIC_TELEGRAM_APP_URL: ${NEXT_PUBLIC_TELEGRAM_APP_URL:-}
     restart: unless-stopped
     ports:
@@ -31,7 +32,7 @@ services:
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-}
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://vch-api.milad-karami.ir}
       NEXT_PUBLIC_TELEGRAM_APP_URL: ${NEXT_PUBLIC_TELEGRAM_APP_URL:-}
     networks:
       - vpnhub

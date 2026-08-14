@@ -1,4 +1,4 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "https://vch-api.milad-karami.ir";
 
 export interface DemoDailyUsage { date: string; bytes: number }
 export interface DemoUsage { demo: true; totalBytes: number; daily: DemoDailyUsage[] }
