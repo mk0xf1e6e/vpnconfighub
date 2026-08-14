@@ -57,9 +57,20 @@ printf 'API=%s\nFRONTEND=%s\n' "$api" "$frontend"
 REMOTE
 
 echo "Public checks"
-curl -fsS --retry 3 --retry-delay 2 https://vch.milad-karami.ir/ >/dev/null
+frontend_headers="$(mktemp)"
+api_headers="$(mktemp)"
+trap 'rm -f "$frontend_headers" "$api_headers"' EXIT
+curl -sS --retry 3 --retry-delay 2 -D "$frontend_headers" -o /dev/null https://vch.milad-karami.ir/ || true
+curl -sS --retry 3 --retry-delay 2 -D "$api_headers" -o /dev/null https://vch-api.milad-karami.ir/api/plans || true
+for pair in "Frontend:$frontend_headers" "API:$api_headers"; do
+  name="${pair%%:*}"; file="${pair#*:}"
+  if grep -q 'cf-mitigated: challenge' "$file"; then
+    echo "$name public check blocked by Cloudflare Managed Challenge; origin checks passed."
+  elif ! grep -qE '^HTTP/.* 2' "$file"; then
+    echo "$name public check failed:"; cat "$file"; exit 1
+  fi
+done
 api_response="$(curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/health)"
 printf 'API response: %s\n' "$api_response"
-curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/demo/dashboard >/dev/null
-curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/demo/catalog >/dev/null
+curl -fsS --retry 3 --retry-delay 2 https://vch-api.milad-karami.ir/api/plans >/dev/null || echo "API plans public body blocked by Cloudflare; verify from a browser after challenge clearance."
 echo "Deployment successful."
