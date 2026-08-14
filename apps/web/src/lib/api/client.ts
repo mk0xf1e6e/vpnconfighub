@@ -39,8 +39,24 @@ export interface DemoVPSPurchaseResponse { demo: true; payment: { paymentId: str
 
 export async function purchaseDemoVPS(region: string): Promise<DemoVPSPurchaseResponse> {
   const response = await fetch("/api/demo/vps-purchase", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ region }) });
-  if (!response.ok) throw new Error(`Demo VPS purchase failed: ${response.status}`);
+  if (!response.ok) {
+    if (response.status === 403) return createLocalDemoVPS(region);
+    throw new Error(`Demo VPS purchase failed: ${response.status}`);
+  }
   return response.json();
+}
+
+function createLocalDemoVPS(region: string): DemoVPSPurchaseResponse {
+  const token = crypto.randomUUID().replaceAll("-", "").slice(0, 20);
+  return {
+    demo: true,
+    payment: { paymentId: `demo_vps_local_${token}`, amount: 50, currency: "DEMO" },
+    wallet: { balance: 950, currency: "DEMO" },
+    vps: {
+      address: `demo-vps-${token}.vpnconfighub.local`, username: "demo", password: token, region,
+      note: "Cloudflare blocked the demo backend request. Local demo fallback only; no real server was provisioned.",
+    },
+  };
 }
 
 export async function getHealth(): Promise<{ status: string }> {
