@@ -40,6 +40,9 @@
 - [x] Product cards expand/collapse with scoped entitlements
 - [x] Fixed empty 48px safe-area top bar
 - [ ] Replace demo endpoints with authenticated backend endpoints
+- [x] Demo API tests and frontend integration verified
+- [x] Demo dashboard deployed to VPS
+- [x] Demo catalog deployed to VPS
 
 ## Frontend Deployment
 
