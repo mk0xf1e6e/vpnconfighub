@@ -35,6 +35,13 @@ export interface Plan {
 }
 export interface PlansResponse { plans: Plan[] }
 export interface DemoPurchaseResponse { demo: true; payment: { demo: true; status: "paid"; provider: "demo"; paymentId: string }; proxy: { demo: true; status: "active"; protocol: string; address: string; port: number; username: string; password: string; note: string } }
+export interface DemoVPSPurchaseResponse { demo: true; payment: { paymentId: string; amount: number; currency: "DEMO" }; wallet: { balance: number; currency: "DEMO" }; vps: { address: string; username: string; password: string; region: string; note: string } }
+
+export async function purchaseDemoVPS(region: string): Promise<DemoVPSPurchaseResponse> {
+  const response = await fetch("/api/demo/vps-purchase", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ region }) });
+  if (!response.ok) throw new Error(`Demo VPS purchase failed: ${response.status}`);
+  return response.json();
+}
 
 export async function getHealth(): Promise<{ status: string }> {
   const response = await fetch(`${API_URL}/health`, {

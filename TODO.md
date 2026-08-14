@@ -62,11 +62,13 @@
 - [x] Unavailable plan review action disabled
 - [x] Demo purchase endpoint with fake payment and generated fake proxy credentials
 - [x] Demo checkout UI clearly labels fake payment and fake proxy output
+- [x] Demo wallet and fake VPS purchase flow
 - [ ] Persist plans and prices in PostgreSQL
 - [ ] Add admin plan management
 - [ ] Add real payment/provisioning enforcement
 - [ ] Replace demo payment with real payment provider
 - [ ] Replace fake proxy generation with real provisioning
+- [ ] Replace demo wallet/VPS purchase with real billing and VPS provisioning
 
 ## Frontend Deployment
 
