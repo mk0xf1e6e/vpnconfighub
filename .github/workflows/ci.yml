@@ -13,4 +13,9 @@ jobs:
       - run: pnpm --filter ./apps/web lint
       - run: pnpm --filter ./apps/web exec tsc --noEmit
       - run: pnpm --filter ./apps/web build
+      - run: go test ./...
+        working-directory: services/api
+      - run: go build ./cmd/api
+        working-directory: services/api
       - run: docker build -f apps/web/Dockerfile .
+      - run: docker build -f services/api/Dockerfile .

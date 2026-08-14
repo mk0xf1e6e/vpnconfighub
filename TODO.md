@@ -31,6 +31,8 @@
 - [x] `vch.milad-karami.ir` public HTTPS verification
 - [x] Next standalone static assets served correctly
 - [x] Frontend container health verified
+- [ ] API health service deployed
+- [ ] `vch-api.milad-karami.ir` Cloudflare DNS record
 - [x] GitHub Actions frontend deployment workflow
 
 Current milestone: frontend container and CI are deployment-ready. Nginx, Cloudflare, VPS, admin, and backend deployment remain deferred until those services exist.

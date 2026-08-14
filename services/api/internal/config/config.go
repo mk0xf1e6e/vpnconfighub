@@ -15,7 +15,7 @@ func Load() Config {
 	}
 
 	if port == "" {
-		port = "8080"
+		port = "4000"
 	}
 
 	return Config{
